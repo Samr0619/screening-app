@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="ERROR">
+    <Properties>
+        <Property name="log-path">log/</Property>
+    </Properties>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+        </Console>
+        <File name="ErrorFile" fileName="${log-path}/error.log">
+            <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+        </File>
+        
+         File Appender for Debug Messages
+        <File name="DebugFile" fileName="log/debug.log">
+            <ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+        </File>
+    </Appenders>
+    
+    
+    <Loggers>
+       <!--     Root Logger for Debug Messages -->
+        <Logger name="com.resumeScreening" level="debug">
+            <AppenderRef ref="DebugFile" />
+        </Logger>
+
+    <!--     Root Logger for Error Messages -->
+        <!-- <Root level="error">
+            <AppenderRef ref="ErrorFile" />
+        </Root> -->
+         <Root level="DEBUG">
+            <AppenderRef ref="Console" />
+            <AppenderRef ref="ErrorFile" />
+        </Root>
+    </Loggers>
+</Configuration> 
