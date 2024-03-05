@@ -25,10 +25,10 @@ public class SecurityConfig {
 				.authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**",
 						 "/swagger-ui/**",
 						 "/v3/**").permitAll()
-						.requestMatchers("/user/**"/*,
+						.requestMatchers("/user/**",
 								"/applicant/**",
 								"/resumes/**",
-								"/skills/**"*/
+								"/skills/**"
 								)
 						.hasAnyAuthority("USER", "ADMIN").anyRequest().authenticated())
 				.exceptionHandling(excpt -> excpt.authenticationEntryPoint(authEntrypoint))
