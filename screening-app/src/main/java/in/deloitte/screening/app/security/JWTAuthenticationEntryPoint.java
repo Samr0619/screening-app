@@ -29,7 +29,6 @@ public class JWTAuthenticationEntryPoint implements AuthenticationEntryPoint{
 		ErrorResponse msgres = new ErrorResponse(HttpStatus.UNAUTHORIZED.toString(),
 				"Access Denied !! : "+authException.getMessage());
 		
-		
 		String jsonResponse = new ObjectMapper().writeValueAsString(msgres);
 		 
 		PrintWriter pw = response.getWriter();

@@ -14,6 +14,8 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import in.deloitte.screening.app.user.entities.RoleEnum;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig{
@@ -28,12 +30,16 @@ public class SecurityConfig{
 		http.csrf(csrf -> csrf.disable())
 			.cors(cors -> cors.disable())
 			.authorizeHttpRequests(auth -> 
-			auth.requestMatchers("/auth/**").permitAll()
+			auth.requestMatchers("/auth/**",
+								 "/swagger-ui/**",
+								 "/v3/**").permitAll()
 			.requestMatchers("/user/**",
 							 "/applicant/**",
 							 "/resumes/**",
-							 "/skills/**")
-			.authenticated()
+							 "/skills/**"
+							 )
+			//.authenticated()
+			.hasAuthority(RoleEnum.USER.getRole())
 			.anyRequest().authenticated())
 			.exceptionHandling(excpt -> excpt.authenticationEntryPoint(authEntrypoint))
 			.sessionManagement(session-> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
