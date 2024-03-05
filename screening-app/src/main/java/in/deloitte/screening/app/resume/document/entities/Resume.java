@@ -20,6 +20,7 @@ public class Resume {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
+	@Column(unique = true)
 	private String email;
 	
 	@Column(name = "resume_file")

@@ -123,8 +123,6 @@ public class ApplicantServiceImpl implements ApplicantService {
 			String jobTitle = getJobTitle(Double.parseDouble(experience));
 
 			List<String> prefferedLocations = getPrefferedLocations(cvContent);
-			prefferedLocations.add("Pan India");
-			prefferedLocations.add("Remote");
 
 			String sw = stopWords();
 			Analyzer analyzer = new StopAnalyzer(new CharArraySet(Arrays.asList(sw.split(" ")), true));

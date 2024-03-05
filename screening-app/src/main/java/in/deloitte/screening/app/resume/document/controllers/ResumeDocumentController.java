@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,6 +21,7 @@ import in.deloitte.screening.app.exceptions.BadInputException;
 import in.deloitte.screening.app.resume.document.dto.ResumeDownloadedUserRequest;
 import in.deloitte.screening.app.resume.document.dto.UploadResumesResponse;
 import in.deloitte.screening.app.resume.document.services.ResumeService;
+import jakarta.validation.Valid;
 
 
 @RestController
@@ -37,10 +38,10 @@ public class ResumeDocumentController {
 	
 	@PostMapping("/upload")
 	public ResponseEntity<UploadResumesResponse> saveApplicantResume(
-							@RequestParam("cv") List<MultipartFile> resumes, 
-							@RequestParam("email") String userEmail) throws IOException{
+							@RequestPart("cv") List<MultipartFile> resumes, 
+							@RequestPart("email") String userEmail) throws IOException{
 		
-		if(resumes == null || resumes.size() == 0) {
+		if(resumes.get(0).isEmpty()) {
 			throw new BadInputException("No resumes found, Please upload atleast 1 resume");
 		}
 		
@@ -48,11 +49,11 @@ public class ResumeDocumentController {
 			throw new BadInputException("Maximum 100 resumes can be uploaded");
 		}
 		
-		if(userEmail == null || userEmail == "") {
+		if(userEmail.equals("\"\"") || userEmail == null) {
 			throw new BadInputException("User email is required to upload");
 		}
-//		UploadResumesResponse response = applicantService.saveApplicantInfo(resumes, userEmail);
-		UploadResumesResponse response = applicantService.saveApplicantInfo(resumes, "test@test.com");
+		UploadResumesResponse response = applicantService.saveApplicantInfo(resumes, userEmail);
+//		UploadResumesResponse response = applicantService.saveApplicantInfo(resumes, "test@test.com");
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
