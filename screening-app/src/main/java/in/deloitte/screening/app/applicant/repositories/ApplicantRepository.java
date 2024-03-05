@@ -1,6 +1,7 @@
 package in.deloitte.screening.app.applicant.repositories;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -8,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import in.deloitte.screening.app.applicant.entities.Applicant;
+import in.deloitte.screening.app.applicant.entities.ApplicantResume;
 
 
 @Repository
@@ -22,4 +24,11 @@ public interface ApplicantRepository extends JpaRepository<Applicant, Integer>{
 	@Query(value = "SELECT resume FROM public.applicant WHERE email=:email", nativeQuery = true)
 	public byte[] getResumeByEmail(String email);
 
+//	@Query(value = "SELECT \n"
+//			+ "  *\n"
+//			+ "FROM \n"
+//			+ "  public.applicant \n"
+//			+ "INNER JOIN public.resume  \n"
+//			+ "  ON applicant.email = resume.email", nativeQuery = true)
+//	public List<ApplicantResume> get();
 }

@@ -32,8 +32,7 @@ public class PdfContentExtractor implements DocumentContentExtractionService {
 		PDFTextStripper pdfStripper = new PDFTextStripper();
 		String content = pdfStripper.getText(document).toLowerCase();
 		
-		return content.replaceAll(
-				"[\\\r\n\\,\\/\\(\\)\\#\\%\\!\\$\\&\\*\\a\\+\\-\\_\\=\\<\\>\\?\\'\\;\\[\\]\\{\\}\\|\\^:,]", "");
+		return DocumentContentExtractionService.cleanDocumentContent(content);
 	}
 
 }

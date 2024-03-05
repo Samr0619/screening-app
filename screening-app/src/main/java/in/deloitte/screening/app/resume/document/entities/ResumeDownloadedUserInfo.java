@@ -2,6 +2,8 @@ package in.deloitte.screening.app.resume.document.entities;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
@@ -10,6 +12,7 @@ import jakarta.persistence.Embeddable;
 public class ResumeDownloadedUserInfo {
 	
 	@Column(name = "applicant_email")
+	@JsonIgnore
 	private String applicantEmail;
 
 	@Column(name = "download_user_email")

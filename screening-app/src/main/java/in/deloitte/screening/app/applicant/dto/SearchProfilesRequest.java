@@ -1,6 +1,5 @@
 package in.deloitte.screening.app.applicant.dto;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;

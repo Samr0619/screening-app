@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -96,11 +95,11 @@ public class GlobalExceptionHandler {
 		ExceptionResponse exceptionResponse = new ExceptionResponse();
 		exceptionResponse.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
 		exceptionResponse.setDefaultMessage(exception.getMessage());
+		exceptionResponse.setFriendlyMessage("Something is broken...");
 		exceptionResponse.setExceptionType(exception.getClass().getName());
 		exceptionResponse.setPath(request.getRequestURI());
 		exceptionResponse.setTimeStamp(LocalDateTime.now());
 		
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exceptionResponse);
 	}
-
 }

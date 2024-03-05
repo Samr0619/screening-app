@@ -14,8 +14,29 @@ import in.deloitte.screening.app.resume.document.dto.UploadResumesResponse;
 @Service
 public interface ApplicantService {
 	
+
+	/**
+	 * 
+	 * @param resumes
+	 * @param userEmail
+	 * 
+	 * @Returns UploadResumesResponse after saving data in Applicant and Resume tables
+	 * 
+	 * @throws IOException
+	 * 
+	 */
 	public UploadResumesResponse saveApplicantInfo(List<MultipartFile> resume/*,  MultipartFile stopWords*/, String userEmail) throws IOException;
 	
+	/**
+	 * 
+	 * @param request
+	 * @param jobDescriptionFile
+	 * 
+	 * @return Returns list of matched profiles
+	 * 
+	 * @throws IOException
+	 * 
+	 */
 	public List<SearchProfilesResponse> matchingProfilesResponse(SearchProfilesRequest request,
 			MultipartFile jobDescriptionFile) throws IOException;
 }

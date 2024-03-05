@@ -1,6 +1,5 @@
 package in.deloitte.screening.app.applicant.repositories;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 import in.deloitte.screening.app.applicant.dto.SearchProfilesRequest;
@@ -19,7 +18,7 @@ public class ApplicantQueries {
 		String query = queryConstant + values.substring(0, values.length()-5);
 		System.out.println("query : " + query);
 
-		return queryConstant + values + "job_title = '" + request.getJobTitle() + "'" + " AND DATE(uploaded_time) between '" + request.getFromDate() + "' AND '" + request.getToDate() + "'";
+		return queryConstant + values + "job_title = '" + request.getJobTitle() + "'" + " AND DATE(uploaded_time) between '" + request.getFromDate() + "' AND '" + request.getToDate() + "' ORDER BY email";
 	}
 	
 }

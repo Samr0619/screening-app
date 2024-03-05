@@ -12,6 +12,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class VectorizeDocumentContent {
 
+	/**
+	 * 
+	 * @param tokens
+	 * 
+	 * @return Returns map of tokens and their frequencies
+	 * 
+	 */
 	public Map<String, Long> getVector(List<String> tokens) {
 		
 		return tokens.stream()
@@ -35,7 +42,7 @@ public class VectorizeDocumentContent {
 		for (long frequency : commonWordMap.values()) {
 			vector[i++] = (int) frequency;
 		}
-//		vector[9] = 1;
+
 		return vector;
 	}
 }

@@ -5,49 +5,51 @@ import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.apache.commons.math3.fraction.Fraction;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.CharArraySet;
 import org.apache.lucene.analysis.core.StopAnalyzer;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import in.deloitte.screening.app.applicant.dto.SearchProfilesRequest;
 import in.deloitte.screening.app.applicant.dto.SearchProfilesResponse;
 import in.deloitte.screening.app.applicant.entities.Applicant;
+import in.deloitte.screening.app.applicant.entities.ApplicantResume;
 import in.deloitte.screening.app.applicant.repositories.ApplicantQueries;
 import in.deloitte.screening.app.applicant.repositories.ApplicantRepository;
+import in.deloitte.screening.app.exceptions.DataNotFoundException;
 import in.deloitte.screening.app.resume.document.dto.UploadResumesResponse;
 import in.deloitte.screening.app.resume.document.entities.Resume;
 import in.deloitte.screening.app.resume.document.entities.ResumeDownloadedUserInfo;
-import in.deloitte.screening.app.resume.document.entities.ResumeDownloadedUsers;
 import in.deloitte.screening.app.resume.document.repositories.ResumeRepository;
 import in.deloitte.screening.app.resume.document.services.CosineSimilarityCalculationService;
 import in.deloitte.screening.app.resume.document.services.DocumentContentAnalyzer;
 import in.deloitte.screening.app.resume.document.services.DocumentContentExtractionService;
 import in.deloitte.screening.app.resume.document.services.VectorizeDocumentContent;
 import in.deloitte.screening.app.skills.repositories.SkillsRepository;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
-
 @Service
 public class ApplicantServiceImpl implements ApplicantService {
+
+	private static final Logger logger = LogManager.getLogger(ApplicantServiceImpl.class);
 
 	@Autowired
 	@Qualifier("pdf")
@@ -78,99 +80,99 @@ public class ApplicantServiceImpl implements ApplicantService {
 	@Autowired
 	SkillsRepository skillsRepository;
 
+	/**
+	 * 
+	 * @param resumes
+	 * @param userEmail
+	 * 
+	 * @Returns UploadResumesResponse after saving data in Applicant and Resume tables
+	 * 
+	 * @throws IOException
+	 * 
+	 */
 	@Transactional
 	@Override
-	public UploadResumesResponse saveApplicantInfo(List<MultipartFile> resumes/* , MultipartFile stopWords */, 
-			String userEmail) throws IOException {
-		
+	public UploadResumesResponse saveApplicantInfo(List<MultipartFile> resumes, String userEmail) throws IOException {
+
 		String cvContent = null;
 		UploadResumesResponse response = new UploadResumesResponse();
 		List<String> allSkills = skillsRepository.getAllSkills();
-		System.out.println("allSkills : " + allSkills);
-		
+		logger.info("skills available in DB : {}" + allSkills);
+
 		List<Applicant> newApplicantsList = new ArrayList<>();
 		List<Resume> newResumesList = new ArrayList<>();
-		
+
 		for (MultipartFile resume : resumes) {
-			
+
 			if (resume.getOriginalFilename().endsWith("pdf"))
-				cvContent = pdfContentExtractor.extractContent(resume);
+				cvContent = pdfContentExtractor.extractContent(resume).toLowerCase();
 			else if (resume.getOriginalFilename().endsWith("docx"))
-				cvContent = docxContentExtractor.extractContent(resume);
+				cvContent = docxContentExtractor.extractContent(resume).toLowerCase();
 
+			String name = resume.getOriginalFilename().substring(0, resume.getOriginalFilename().indexOf('.'));
+			
+			String email = name + "@nomail.com";
+			Optional<String> optionalEmail = getEmail(cvContent);
+			if(optionalEmail.isPresent()) {
+				String mailSuffix = getMailSuffix(optionalEmail.get());
+				email = optionalEmail.get().split("@")[0] + mailSuffix;
+			}
+			
 			String experience = getExperience(cvContent);
-
-			String email = "email id not available";
-			String mailSuffix = getMailSuffix(getEmail(cvContent));
-			email = getEmail(cvContent).split("@")[0] + mailSuffix;
+			
+			String jobTitle = getJobTitle(Double.parseDouble(experience));
 
 			List<String> prefferedLocations = getPrefferedLocations(cvContent);
-
-			String name = null;
-			name = resume.getOriginalFilename().substring(0, resume.getOriginalFilename().indexOf('.'));
+			prefferedLocations.add("Pan India");
+			prefferedLocations.add("Remote");
 
 			String sw = stopWords();
 			Analyzer analyzer = new StopAnalyzer(new CharArraySet(Arrays.asList(sw.split(" ")), true));
-			List<String> cvToken = documentContentAnalyzer.tokenizeContent(analyzer, cvContent.toLowerCase());
+			List<String> cvToken = documentContentAnalyzer.tokenizeContent(analyzer, cvContent);
 
-			List<String> cvBigrams = new ArrayList<>();
-
+			List<String> cvSkills = new ArrayList<>();
 			for (int i = 0; i < cvToken.size() - 1; i++) {
 				if (allSkills.contains(cvToken.get(i) + " " + cvToken.get(i + 1)))
-					cvBigrams.add(cvToken.get(i) + " " + cvToken.get(i + 1));
+					cvSkills.add(cvToken.get(i) + " " + cvToken.get(i + 1));
 				else if (allSkills.contains(cvToken.get(i)))
-					cvBigrams.add(cvToken.get(i));
+					cvSkills.add(cvToken.get(i));
 			}
+
+			String fileName = resume.getOriginalFilename();
+			LocalDateTime uploadTime = LocalDateTime.now();
+			Map<String, Long> cVSkillsVector = vectorizeDocumentContent.getVector(cvSkills);
+			logger.debug("Resume skills vector : {}" + cVSkillsVector);
 
 			Resume res = new Resume();
 			res.setEmail(email);
 			res.setResumeFile(resume.getBytes());
-			String fileName = resume.getOriginalFilename();
 			res.setDocType(fileName.substring(fileName.indexOf(".") + 1));
 			res.setText(cvContent);
 			res.setUploadedBy(userEmail);
-			LocalDateTime uploadTime = LocalDateTime.now();
 			res.setUploadTime(uploadTime);
-			Map<String, Long> vector = vectorizeDocumentContent.getVector(cvBigrams);
-			System.out.println("vector : " + vector);
-			res.setVector(vector);
+			res.setVector(cVSkillsVector);
 			newResumesList.add(res);
 
-			Set<String> skills = new HashSet<>(cvBigrams);
 
-			skills.retainAll(Arrays.asList(getSkills().toLowerCase().split(",")));
-			String jobTitle = null;
-
-			System.out.println("skills : " + skills);
-
-			if (Double.parseDouble(experience) >= 1 && Double.parseDouble(experience) < 3) {
-				jobTitle = "Analyst";
-			}
-			else if (Double.parseDouble(experience) >= 3 && Double.parseDouble(experience) < 5) {
-				jobTitle = "Consultant";
-			}
-			else if (Double.parseDouble(experience) >= 5 && Double.parseDouble(experience) < 10) {
-				jobTitle = "Senior Consultant";
-			}
-			else if (Double.parseDouble(experience) >= 10 && Double.parseDouble(experience) < 15) {
-				jobTitle = "Manager";
-			}
-			else if (Double.parseDouble(experience) >= 15) {
-				jobTitle = "Associate Director";
-			}
-
-			Applicant newApplicant = new Applicant(email, name, experience, jobTitle, prefferedLocations,
-					userEmail, uploadTime, skills);
+			Applicant newApplicant = new Applicant(email, name, experience, jobTitle, prefferedLocations, userEmail,
+					uploadTime, cVSkillsVector.keySet());
 
 			newApplicantsList.add(newApplicant);
 		}
 
 		applicantRepository.saveAll(newApplicantsList);
 		resumeRepository.saveAll(newResumesList);
-		response.setMessage("uploaded successfully...");
+		response.setMessage(newApplicantsList.size() + " resumes uploaded successfully...");
 		return response;
 	}
 
+	/**
+	 * 
+	 * @param email
+	 * 
+	 * @return Returns email suffix from cvContent
+	 * 
+	 */
 	private String getMailSuffix(String email) {
 		return email
 				.contains("@gmail.com")
@@ -191,7 +193,9 @@ public class ApplicantServiceImpl implements ApplicantService {
 	/**
 	 * 
 	 * @param cvContent
-	 * @return
+	 * 
+	 * @return Return experience from cvContent
+	 * 
 	 */
 	public String getExperience(String cvContent) {
 
@@ -204,24 +208,40 @@ public class ApplicantServiceImpl implements ApplicantService {
 			experience = cvContent.charAt(i) + experience;
 		}
 
-//		System.out.println(Arrays.toString(cvContent.toLowerCase().split(" ")));
-//		String exp = Arrays.stream(cvContent.toLowerCase().split(" ")).reduce((c, n) -> {
-//			if (n.equals("years")) {
-//				return c;
-//			}
-//			return c;
-//		}).get();
-
 		return experience;
 	}
 
 	/**
 	 * 
 	 * @param cvContent
-	 * @return
+	 * 
+	 * @return Return Mobile number from cvContent
+	 * 
 	 */
-	public String getEmail(String cvContent) {
-		return Arrays.stream(cvContent.split(" ")).filter(s -> checkMailSuffix(s)).findFirst().get();
+	public String getMobileNumber(String cvContent) {
+
+		Pattern pattern = Pattern.compile("\\b\\d{10,12}\\b");
+		Matcher matcher = pattern.matcher(cvContent);
+		String mobile = "";
+
+		while (matcher.find()) {
+			mobile = matcher.group();
+			System.out.println("mobile : " + mobile);
+			break;
+		}
+
+		return mobile.length() == 10 ? mobile : mobile.substring(2);
+	}
+
+	/**
+	 * 
+	 * @param cvContent
+	 * 
+	 * @return Returns email
+	 * 
+	 */
+	public Optional<String> getEmail(String cvContent) {
+		return Arrays.stream(cvContent.split(" ")).filter(s -> checkMailSuffix(s)).findFirst();
 	}
 
 	public boolean checkMailSuffix(String s) {
@@ -236,142 +256,155 @@ public class ApplicantServiceImpl implements ApplicantService {
 
 	/**
 	 * 
+	 * @param experience
+	 * 
+	 * @return Returns jodTitle
+	 * 
+	 */
+	public String getJobTitle(double experience) {
+
+		return (experience >= 1 && experience < 3) ? "Analyst"
+				: ((experience >= 3 && experience < 6) ? "Consultant"
+						: ((experience >= 6 && experience < 10) ? "Senior Consultant"
+								: ((experience >= 10 && experience < 15) ? "Manager" : "Associate Director")));
+	}
+
+	/**
+	 * 
 	 * @param cvContent
-	 * @return
+	 * 
+	 * @return Returns preferred locations of applicant
+	 * 
 	 */
 	public List<String> getPrefferedLocations(String cvContent) {
 
 		List<String> locationsList = Arrays.asList("Hyderabad", "Banglore", "Pune", "Thane", "chennai", "Coimbatore",
-				"Mumbai", "Kolkata", "Goa", "Delhi", "Noida", "Remote", "Kochi");
+				"Mumbai", "Kolkata", "Goa", "Delhi", "Noida", "Kochi", "Gurugram", "Noida");
 
 		return locationsList.stream().filter(location -> cvContent.contains(location.toLowerCase())).toList();
 	}
 
-//	public String getBigrams() {
-//		return "microsoft sql,servlets,oracle database,rest api,Java,Core java,objectOriented programming,Advanced java,oops concepts,collection framework,exception handling,multithreading,spring framework,spring boot,hibernate,micro services,restful webservices,design patterns,apache kafka,rabbitMQ,sql,nosql,mysql,postgreSQL,oracle dB,mongo db,dynamo db,tomcat server,jboss server,spring security,aws,docker,Kubernetes,git,github,azure,gcp,html/css,java script,angular,reactjs,vuejs,ajax,redux,Jenkins,ci/cd,big data,data science,data analytics,machine learning,artificial intelligence,collaboration,business satisfaction,passionate work,agile methodology";
-//	}
-
-	public String getSkills() {
-
-		List<String> skills = skillsRepository.getAllSkills();
-		StringBuilder skillsBigramsBuilder = new StringBuilder("");
-		for (String skill : skills) {
-//			if(skill.contains(" ")) {
-			skillsBigramsBuilder.append(skill + ",");
-//			}
-		}
-
-		return skillsBigramsBuilder.toString();
-	}
-
+	/**
+	 * 
+	 * @param searchProfilesRequest, jobDescriptionFile
+	 * 
+	 * @return Returns list of matched profiles
+	 * 
+	 */
 	@Override
 	public List<SearchProfilesResponse> matchingProfilesResponse(SearchProfilesRequest request,
 			MultipartFile jobDescriptionFile) throws IOException {
 
+		logger.info(
+				"Started executing matchingProfilesResponse(SearchProfilesRequest request, MultipartFile jobDescriptionFile)...");
+
 		@SuppressWarnings("unchecked")
-		List<Applicant> resultList = entityManager.createNativeQuery(
-				ApplicantQueries.createApplicantResultsQuery(request),
-				Applicant.class).getResultList();
+		List<Applicant> applicantList = entityManager
+				.createNativeQuery(ApplicantQueries.createApplicantResultsQuery(request), Applicant.class)
+				.getResultList();
 
-		return resultList.stream().map(e -> {
-			SearchProfilesResponse response = new SearchProfilesResponse();
-			try {
-				response = setSearchProfilesResponse(e, jobDescriptionFile);
-			} catch (IOException ex) {
-				ex.printStackTrace();
+		List<Resume> resumesList = resumeRepository.getAllResumeData();
+
+		List<ApplicantResume> applicantResumesList = new ArrayList<>();
+		for (int i = 0; i < resumesList.size(); i++) {
+			for (int j = 0; j < applicantList.size(); j++) {
+				if (resumesList.get(i).getEmail().equals(applicantList.get(j).getEmail())) {
+					ApplicantResume ar = new ApplicantResume();
+					ar.setApplicant(applicantList.get(j));
+					ar.setResume(resumesList.get(i));
+					applicantResumesList.add(ar);
+				}
 			}
-			return response;
-		}).collect(Collectors.toList());
-	}
+		}
+		logger.debug("Matched applicants, resumes list : {}", applicantResumesList);
 
-	public SearchProfilesResponse setSearchProfilesResponse(Applicant a, MultipartFile jobDescriptionFile)
-			throws IOException {
+		if (applicantList == null || applicantList.size() == 0) {
+			logger.error("No results found list is null or empty, resultList: {}", applicantList);
+			throw new DataNotFoundException("No data found for given input...");
+		}
+
+		logger.info("{} Profiles available for {} Role", applicantList.size(), request.getJobTitle());
+		logger.debug("Available profiles data : {}", applicantList);
 
 		String jdContent = pdfContentExtractor.extractContent(jobDescriptionFile);
-		System.out.println("jdContent : " + jdContent);
+		logger.debug("Cleaned JD content : {}", jdContent);
+
 		Analyzer analyzer = new StopAnalyzer(new CharArraySet(Arrays.asList(stopWords().split(" ")), true));
 		List<String> jdToken = documentContentAnalyzer.tokenizeContent(analyzer, jdContent.toLowerCase());
+		logger.debug("JD content tokens : {}", jdToken);
 
-		System.out.println("jdToken : " + jdToken);
-
-		List<String> jdBigram = new ArrayList<>();
+		List<String> jdSkills = new ArrayList<>();
 		List<String> skills = skillsRepository.getAllSkills();
 		for (String skill : skills) {
 			if (jdToken.contains(skill)) {
-				jdBigram.add(skill);
+				jdSkills.add(skill);
 			}
 		}
 		for (int i = 0; i < jdToken.size() - 1; i++) {
 			if (skills.contains(jdToken.get(i) + " " + jdToken.get(i + 1)))
-				jdBigram.add(jdToken.get(i) + " " + jdToken.get(i + 1));
+				jdSkills.add(jdToken.get(i) + " " + jdToken.get(i + 1));
 		}
-		System.out.println("jdBigrams : " + jdBigram);
+		logger.debug("skills in JD : {}", jdSkills);
 
-		Map<String, Long> jdMap = vectorizeDocumentContent.getVector(jdBigram);
-		System.out.println("email : " + a.getEmail());
-		Resume resume = resumeRepository.getResumeData(a.getEmail());
-		System.out.println("resume : " + resume);
-		System.out.println("jdMap : " + jdMap);
+		Map<String, Long> jdVector = vectorizeDocumentContent.getVector(jdSkills);
+		logger.debug("JD skills vector : {}", jdVector);
 
-		Map<String, Long> cvMap = resume.getVector();
-		System.out.println("cvMap : " + cvMap);
-		Map<String, Long> cvVector = new LinkedHashMap<>();
-		Map<String, Long> jdVector = new LinkedHashMap<>();
+		List<SearchProfilesResponse> responses = applicantResumesList.stream()
+				.map(applicant -> setSearchProfilesResponse(applicant, jdVector))
+				.sorted((o1, o2) -> o1.getProfileMatch().compareTo(o2.getProfileMatch())).collect(Collectors.toList());
+		Collections.reverse(responses);
+		return responses;
+	}
 
-		for (String skill : skills) {
-			if (cvMap.containsKey(skill)) {
-				cvVector.put(skill, cvMap.get(skill));
-//				cvVector.put(skill, (long) 1);
-			}
+	/**
+	 * 
+	 * @param applicant
+	 * @param jdVector
+	 * 
+	 * @return Returns a matched profile
+	 * 
+	 * @throws IOException
+	 * 
+	 */
+	public SearchProfilesResponse setSearchProfilesResponse(ApplicantResume applicantResume,
+			Map<String, Long> jdVector) {
+
+		logger.info("Started preparing response of applicant : {}", applicantResume.getApplicant().getEmail());
+
+		Resume resume = applicantResume.getResume();
+		logger.info("{} Resume data : {}", applicantResume.getApplicant().getEmail(), resume);
+
+		List<ResumeDownloadedUserInfo> resumeDownloadsInfo = resume.getDownloads();
+		logger.info("Resume downloaded users for apllicant {} : {}", resume.getEmail(), resumeDownloadsInfo);
+
+		Map<String, Long> cvVector = resume.getVector();
+		logger.info("Resume skills vector from DB : {}", cvVector);
+
+		double cosineSimilarity = 0.0;
+		try {
+			cosineSimilarity = cosineSimilarityCalculationService.getCosineSimilarity(cvVector, jdVector);
+		} catch (IOException e) {
+			logger.error("Error occured while calculating cosine similarity");
+			e.printStackTrace();
 		}
-
-		for (Map.Entry<String, Long> e : jdMap.entrySet()) {
-//			jdVector.put(e.getKey(), (long)1);
-			jdVector.put(e.getKey(), e.getValue());
-		}
-
-		double cosineSimilarity = cosineSimilarityCalculationService.getCosineSimilarity(cvVector, jdVector);
-//		double cosineSimilarity = (double)cvVector.size()/jdVector.size();
-//		System.out.println("cvVector.size()/jdVector.size() : " + cosineSimilarity);
-//		System.out.println("cvVector.size() : " + cvVector.size());
-//		System.out.println("jdVector.size() : " + jdVector.size());
-
-		System.out.println("jdBigrams : " + jdBigram);
-
-		List<ResumeDownloadedUsers> resumeDownloadedUsers = new ArrayList<>();
-		Resume resumeDownloadedsInfo = resumeRepository
-				.getDownloadedUserByApplicantEmail(a.getEmail());
-		System.out.println("resumeDownloadedsInfo : " + resumeDownloadedsInfo);
-		List<ResumeDownloadedUserInfo> resumeDownloadsInfo = resumeDownloadedsInfo.getDownloads();
-		System.out.println("resumeDownloadsInfo : " + resumeDownloadsInfo);
-		for (ResumeDownloadedUserInfo resumeDownloadedUserInfo : resumeDownloadsInfo) {
-//			List<ResumeDownloadedUserInfo> resumeDownloadedUserInfo = resumeInfo.getDownloads();
-			ResumeDownloadedUsers resumeDownloadedUser = new ResumeDownloadedUsers();
-			resumeDownloadedUser.setDownloadedUserEmail(resumeDownloadedUserInfo.getDownloadedUserEmail());
-			resumeDownloadedUser.setDownloadTime(resumeDownloadedUserInfo.getDownloadTime());
-			resumeDownloadedUsers.add(resumeDownloadedUser);
-		}
+		logger.debug("Cosine similarity value : {}", cosineSimilarity);
 
 		Fraction fraction = new Fraction(cosineSimilarity * 100);
 		DecimalFormat df = new DecimalFormat("#.##");
 		Double profileMatch = Double.parseDouble(df.format(fraction.doubleValue()));
+		logger.info("profile match with JD by {}", profileMatch);
 
-		return new SearchProfilesResponse(a.getEmail(), profileMatch, a.getSkills(), a.getExperience() + " years",
-				a.getUploadedBy(), a.getUploadTime(), resume.getResumeFile(), resumeDownloadedUsers);
+		Applicant applicant = applicantResume.getApplicant();
+		return new SearchProfilesResponse(applicant.getEmail(), profileMatch, applicant.getSkills(),
+				applicant.getExperience() + " years", applicant.getUploadedBy(), applicant.getUploadTime(),
+				resume.getResumeFile(), resumeDownloadsInfo);
 	}
 
-	public Map<String, Long> convertToEntityAttribute(String dbData) {
-		ObjectMapper mapper = new ObjectMapper();
-		Map<String, Long> map = new HashMap<>();
-		try {
-			map = mapper.readValue(dbData, new TypeReference<Map<String, Long>>() {
-			});
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-		}
-		return map;
-	}
-
+	/**
+	 * 
+	 * @return Returns stop words to be removed
+	 * 
+	 */
 	public String stopWords() {
 		return "0o 0s 3a 3b 3d 6b 6o a a1 a2 a3 a4 ab able about above abst ac accordance according accordingly across \r\n"
 				+ "act actually ad added adj ae af affected affecting affects after afterwards ag again against ah ain ain't aj \r\n"

@@ -9,7 +9,7 @@ import in.deloitte.screening.app.skills.entities.Skills;
 
 public interface SkillsRepository extends JpaRepository<Skills, Integer>{
 	
-	@Query(value = "SELECT skill_name FROM public.skills", nativeQuery = true)
+	@Query(value = "SELECT skill_name FROM skills_schema.skills", nativeQuery = true)
 	public List<String> getAllSkills();
 
 }

@@ -1,11 +1,15 @@
 package in.deloitte.screening.app.user.services;
 
 
-import jakarta.transaction.Transactional;
+import java.util.Date;
+import java.util.Optional;
+import java.util.Random;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,9 +19,9 @@ import in.deloitte.screening.app.exceptions.AuthorizationException;
 import in.deloitte.screening.app.exceptions.UserNotFoundException;
 import in.deloitte.screening.app.exceptions.UserSignupException;
 import in.deloitte.screening.app.security.JWTHelper;
-import in.deloitte.screening.app.user.bean.ForgotPasswordRequest;
-import in.deloitte.screening.app.user.bean.JWTRequest;
-import in.deloitte.screening.app.user.bean.JWTResponse;
+import in.deloitte.screening.app.user.dto.ForgotPasswordRequest;
+import in.deloitte.screening.app.user.dto.JWTRequest;
+import in.deloitte.screening.app.user.dto.JWTResponse;
 import in.deloitte.screening.app.user.dto.SignUpDto;
 import in.deloitte.screening.app.user.entities.LoginTable;
 import in.deloitte.screening.app.user.entities.SignUpTable;
@@ -25,11 +29,7 @@ import in.deloitte.screening.app.user.entities.UserRoles;
 import in.deloitte.screening.app.user.repositories.LoginRepository;
 import in.deloitte.screening.app.user.repositories.SignUpRepository;
 import in.deloitte.screening.app.user.repositories.UserRolesRepository;
-
-import java.time.LocalTime;
-import java.util.Date;
-import java.util.Optional;
-import java.util.Random;
+import jakarta.transaction.Transactional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -104,7 +104,7 @@ public class UserServiceImpl implements UserService {
         LoginTable login = new LoginTable();
         login.setUserName(bean.getEmail().split("@")[0]);
         login.setPassword(passwordEncoder.encode(bean.getPassword()));
-        UserRoles roles = userRolesRepository.findByRoleCode("002").get();
+        UserRoles roles = userRolesRepository.findByRoleCode("2").get();
         login.setRole(roles);
 
         login = loginRepository.save(login);
@@ -130,12 +130,20 @@ public class UserServiceImpl implements UserService {
 //            response.setEmail(signUpRepository.findByLogin(
 //            		loginRepository.findByUserName(userDetails.getUsername()).get()
 //            		).get().getEmail());
-        	SignUpTable signup=signUpRepository.findByEmail(request.getEmail()).orElse(null);
-        	if(signup==null) {
-        		throw new AuthorizationException("Credentials Not Valid!");
-        	}
-        	this.doAuthenticate(signup.getLogin().getUsername(), request.getPassString());
-	          UserDetails userDetails = userDetailsService.loadUserByUsername(signup.getLogin().getUsername());
+//        	SignUpTable signup=signUpRepository.findByEmail(request.getEmail()).orElse(null);
+//        	System.out.println("signup email : " + signup.getEmail());
+//        	System.out.println("signup id : " + signup.getSignUpId());
+//        	System.out.println("signup login id : " + signup.getLogin());
+//        	if(signup.getEmail() == null) {
+//        		System.out.println("Throwing exception...");
+//        		throw new AuthorizationException("Credentials Not Valid!");
+//        	}
+        	
+//        	this.doAuthenticate(request.getEmail(), request.getPassString());
+	          UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
+	          System.out.println("userDetails password : " + userDetails.getPassword());
+	          System.out.println("userDetails username : " + userDetails.getUsername());
+	          System.out.println("userDetails authorities : " + userDetails.getAuthorities());
 	          String token = this.jwtHelper.generateToken(userDetails);
 	          response = new JWTResponse(token, userDetails.getUsername());
 	          response.setEmail(signUpRepository.findByLogin(
@@ -158,9 +166,9 @@ public class UserServiceImpl implements UserService {
         return byEmail.get();
     }
 
-    private void doAuthenticate(String email, String password) {
+    private Authentication doAuthenticate(String email, String password) {
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(email, password);
-        authenticationManager.authenticate(authentication);
+        return authenticationManager.authenticate(authentication);
     }
 
     @Override

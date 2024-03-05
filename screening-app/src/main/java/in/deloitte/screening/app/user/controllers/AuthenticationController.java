@@ -1,31 +1,35 @@
 package in.deloitte.screening.app.user.controllers;
 
-import com.google.gson.Gson;
-
-import in.deloitte.screening.app.exceptions.UserNotFoundException;
-import in.deloitte.screening.app.user.bean.ForgotPasswordRequest;
-import in.deloitte.screening.app.user.bean.JWTRequest;
-import in.deloitte.screening.app.user.bean.JWTResponse;
-import in.deloitte.screening.app.user.bean.MessageResponse;
-import in.deloitte.screening.app.user.dto.EmailDetailsDto;
-import in.deloitte.screening.app.user.dto.SignUpDto;
-import in.deloitte.screening.app.user.entities.SignUpTable;
-import in.deloitte.screening.app.user.services.EmailService;
-import in.deloitte.screening.app.user.services.UserService;
+import java.time.LocalDateTime;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDateTime;
+import in.deloitte.screening.app.exceptions.UserNotFoundException;
+import in.deloitte.screening.app.user.dto.EmailDetailsDto;
+import in.deloitte.screening.app.user.dto.ForgotPasswordRequest;
+import in.deloitte.screening.app.user.dto.JWTRequest;
+import in.deloitte.screening.app.user.dto.JWTResponse;
+import in.deloitte.screening.app.user.dto.MessageResponse;
+import in.deloitte.screening.app.user.dto.SignUpDto;
+import in.deloitte.screening.app.user.entities.SignUpTable;
+import in.deloitte.screening.app.user.services.EmailService;
+import in.deloitte.screening.app.user.services.UserService;
 
 @RestController
 @RequestMapping("/auth")
 public class AuthenticationController {
-    private static final Gson gson = new Gson();
+//    private static final Gson gson = new Gson();
     @Autowired
     private UserService userService;
     @Autowired
@@ -42,6 +46,7 @@ public class AuthenticationController {
 
     @PostMapping("/signUp")
     public ResponseEntity<?> signUp(@RequestBody SignUpDto bean) {
+    	System.out.println("bean : " + bean);
         String status = null;
         logger.debug("API ::: /signUp");
         status = userService.SaveSignUp(bean);

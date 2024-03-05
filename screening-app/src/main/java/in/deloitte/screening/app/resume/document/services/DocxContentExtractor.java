@@ -23,9 +23,9 @@ public class DocxContentExtractor implements DocumentContentExtractionService {
 		String content = extractor.getText().toLowerCase();
 		extractor.close();
 		document.close();
+		
+		return DocumentContentExtractionService.cleanDocumentContent(content);
 
-		return content.replaceAll(
-				"[\\\r\n\\,\\/\\(\\)\\#\\%\\!\\$\\&\\*\\+\\-\\_\\=\\<\\>\\?\\'\\;\\[\\]\\{\\}\\|\\^:,]", "");
 	}
 
 }

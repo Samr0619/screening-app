@@ -16,14 +16,6 @@ import jakarta.persistence.Id;
 @Entity
 public class Resume {
 
-	public Resume(int id, String email, String text, Map<String, Long> vector) {
-		super();
-		this.id = id;
-		this.email = email;
-		this.text = text;
-		this.vector = vector;
-	}
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -49,17 +41,8 @@ public class Resume {
 	private Map<String, Long> vector;
 	
 	@ElementCollection
-//	@Column(name = "downloads")
 	private List<ResumeDownloadedUserInfo> downloads;
 	
-	public Resume(String email, byte[] resumeFile, String docType, String text, Map<String, Long> vector) {
-		super();
-		this.email = email;
-		this.resumeFile = resumeFile;
-		this.docType = docType;
-		this.text = text;
-		this.vector = vector;
-	}
 
 	/**
 	 * @return the docType
@@ -73,14 +56,6 @@ public class Resume {
 	 */
 	public void setDocType(String docType) {
 		this.docType = docType;
-	}
-
-	public Resume(String email, byte[] resumeFile, String text, Map<String, Long> vector) {
-		super();
-		this.email = email;
-		this.resumeFile = resumeFile;
-		this.text = text;
-		this.vector = vector;
 	}
 
 	/**

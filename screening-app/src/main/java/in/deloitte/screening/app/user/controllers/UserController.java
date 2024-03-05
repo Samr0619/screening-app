@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import in.deloitte.screening.app.exceptions.UserNotFoundException;
-import in.deloitte.screening.app.user.bean.PasswordUpdateRequest;
+import in.deloitte.screening.app.user.dto.PasswordUpdateRequest;
 import in.deloitte.screening.app.user.entities.SignUpTable;
 import in.deloitte.screening.app.user.entities.UserRoles;
 import in.deloitte.screening.app.user.repositories.UserRolesRepository;

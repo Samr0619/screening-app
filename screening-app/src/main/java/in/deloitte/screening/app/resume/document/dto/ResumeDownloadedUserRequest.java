@@ -1,6 +1,5 @@
 package in.deloitte.screening.app.resume.document.dto;
 
-import java.time.LocalDateTime;
 
 public class ResumeDownloadedUserRequest {
 

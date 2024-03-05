@@ -3,9 +3,9 @@ package in.deloitte.screening.app.user.services;
 import in.deloitte.screening.app.exceptions.AuthorizationException;
 import in.deloitte.screening.app.exceptions.UserNotFoundException;
 import in.deloitte.screening.app.exceptions.UserSignupException;
-import in.deloitte.screening.app.user.bean.ForgotPasswordRequest;
-import in.deloitte.screening.app.user.bean.JWTRequest;
-import in.deloitte.screening.app.user.bean.JWTResponse;
+import in.deloitte.screening.app.user.dto.ForgotPasswordRequest;
+import in.deloitte.screening.app.user.dto.JWTRequest;
+import in.deloitte.screening.app.user.dto.JWTResponse;
 import in.deloitte.screening.app.user.dto.SignUpDto;
 import in.deloitte.screening.app.user.entities.SignUpTable;
 
