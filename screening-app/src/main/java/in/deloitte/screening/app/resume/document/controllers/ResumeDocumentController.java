@@ -51,8 +51,8 @@ public class ResumeDocumentController {
 		if(userEmail == null || userEmail == "") {
 			throw new BadInputException("User email is required to upload");
 		}
-//		UploadResumesResponse response = applicantService.saveApplicantInfo(resumes, userEmail);
-		UploadResumesResponse response = applicantService.saveApplicantInfo(resumes, "test@test.com");
+		UploadResumesResponse response = applicantService.saveApplicantInfo(resumes, userEmail);
+//		UploadResumesResponse response = applicantService.saveApplicantInfo(resumes, "test@test.com");
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
