@@ -16,6 +16,7 @@ public interface UserService {
     String SaveSignUp(SignUpDto bean) throws UserSignupException;
 
     JWTResponse validateLogin(JWTRequest request) throws AuthorizationException;
+
     SignUpTable getUser(String email) throws UserNotFoundException;
 
     Long generateOtp(String email) throws UserNotFoundException;
@@ -23,5 +24,6 @@ public interface UserService {
     void saveOtp(String email, Long otp) throws UserNotFoundException;
 
     SignUpTable forgotPassword(ForgotPasswordRequest request) throws UserNotFoundException;
-    String validateOTP(Long otp) throws UserNotFoundException;
+
+    String validateOTP(Long otp, String email) throws UserNotFoundException;
 }
