@@ -23,12 +23,4 @@ public interface ApplicantRepository extends JpaRepository<Applicant, Integer>{
 	
 	@Query(value = "SELECT resume FROM public.applicant WHERE email=:email", nativeQuery = true)
 	public byte[] getResumeByEmail(String email);
-
-//	@Query(value = "SELECT \n"
-//			+ "  *\n"
-//			+ "FROM \n"
-//			+ "  public.applicant \n"
-//			+ "INNER JOIN public.resume  \n"
-//			+ "  ON applicant.email = resume.email", nativeQuery = true)
-//	public List<ApplicantResume> get();
 }

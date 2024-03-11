@@ -39,7 +39,10 @@ public class DocumentContentAnalyzer {
 	public List<String> tokenizeContent(Analyzer analyzer, String cv) throws IOException {
 
 		TokenStream result = analyzer.tokenStream(null, cv.toLowerCase());
-//		result = new PorterStemFilter(result);
+		/*
+		 * Don't Remove Commented Code 
+		   result = new PorterStemFilter(result);
+		*/
 		CharTermAttribute resultAttr = result.addAttribute(CharTermAttribute.class);
 		List<String> tokens = new ArrayList<>();
 		result.reset();

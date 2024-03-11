@@ -45,20 +45,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 			try {
 				username = this.jwtHelper.extractUsername(token);
 			} catch (IllegalArgumentException e) {
-                logger.info("Illegal Argument while fetching the username !!");
+                logger.error("Illegal Argument while fetching the username !!");
                 e.printStackTrace();
             } catch (ExpiredJwtException e) {
-                logger.info("Given jwt token is expired !!");
+                logger.error("Given jwt token is expired !!");
                 e.printStackTrace();
             } catch (MalformedJwtException e) {
-                logger.info("Some changed has done in token !! Invalid Token");
+                logger.error("Some changed has done in token !! Invalid Token");
                 e.printStackTrace();
             } catch (Exception e) {
+            	logger.error("Unexpected Error : {} ",e.getMessage());
                 e.printStackTrace();
 
             }
         } else {
-            logger.info("Invalid Header Value !! ");
+            logger.error("Invalid Header Value !! ");
         }
 		
 		if(username !=null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -71,7 +72,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
             else {
-            	logger.info("Validation fails !!");
+            	logger.error("Validation fails !!");
             }
 		}
 		

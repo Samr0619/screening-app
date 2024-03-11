@@ -19,27 +19,25 @@ import in.deloitte.screening.app.user.services.UserService;
 @RestController
 @RequestMapping("/user")
 public class UserController {
+
+	private Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
 	
 	@Autowired
     UserRolesRepository userRoleRepository;
+	
 	@Autowired
 	private UserService userService;
-	private Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
-
-	@GetMapping("/test")
-	public ResponseEntity<?> getHello(){
-		return ResponseEntity.ok("Hello, You are Authenticated");
-	}
 	
 	@GetMapping("/getRoles")
 	public ResponseEntity<?> getRoles(){
-		List<UserRoles>list = userRoleRepository.findAll();
 		
+		List<UserRoles>list = userRoleRepository.findAll();	
 		return ResponseEntity.ok(list);
 	}
+	
 	@PutMapping("/update-password")
 	public ResponseEntity<?> updatePassword(@RequestBody PasswordUpdateRequest request) throws UserNotFoundException {
-		logger.debug("API ::: /update-password");
+
 		SignUpTable user = userService.updatePassword(request.getCurrentPassword(), request.getNewPassword(), request.getEmail());
 		return new ResponseEntity<>(user, HttpStatus.OK);
 	}

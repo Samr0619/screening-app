@@ -37,8 +37,7 @@ public class CosineSimilarityCalculationServiceImpl implements CosineSimilarityC
 				}
 			}
 		}
-		System.out.println("cv : " + cv);
-
+		
 		double[] jdWordsVector = vectorize.convertToDoubleVector(jdMap);
 		double[] resumeWordsVector = new double[jdMap.size()];
 		for (int i = 0; i < cv.size(); i++) {

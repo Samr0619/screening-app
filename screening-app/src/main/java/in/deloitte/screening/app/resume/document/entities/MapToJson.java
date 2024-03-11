@@ -30,7 +30,6 @@ public class MapToJson implements AttributeConverter<Map<String, Long>, String>{
 	public Map<String, Long> convertToEntityAttribute(String dbData) {
 		
 		Map<String, Long> map = new HashMap<>();
-		System.out.println("dbData : " + dbData);
 		try {
 			map =  mapper.readValue(dbData, new TypeReference<Map<String, Long>>(){});
 		} catch (JsonProcessingException e) {

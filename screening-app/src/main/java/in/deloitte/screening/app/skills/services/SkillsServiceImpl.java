@@ -18,17 +18,11 @@ public class SkillsServiceImpl implements SkillsService {
 
 	@Override
 	public List<Skills> addSkills(AddSkillsRequest addSkillsRequest) {
-		
-//		List<Skills> skillList = new ArrayList<>();
-//		for(String s : addSkillsRequest.getSkills()) {
-//			Skills skill = new Skills(s);
-//			skillList.add(skill);
-//		}
+	
 
 		List<Skills> skillList =  addSkillsRequest.getSkills()
 												  .stream()
 												  .map(skill -> new Skills(skill)).toList();
-		System.out.println("skillList : " + skillList);
 		return skillsRepository.saveAll(skillList);
 	}
 

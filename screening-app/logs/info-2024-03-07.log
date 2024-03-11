@@ -1,0 +1,136 @@
+14:43:02.392 [background-preinit] INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+14:43:02.497 [main] INFO  in.deloitte.screening.app.ScreeningAppApplication - Starting ScreeningAppApplication using Java 17.0.7 with PID 6724 (C:\Users\samrsawant\git\screening-app\screening-app\target\classes started by samrsawant in C:\Users\samrsawant\git\screening-app\screening-app)
+14:43:02.504 [main] INFO  in.deloitte.screening.app.ScreeningAppApplication - No active profile set, falling back to 1 default profile: "default"
+14:43:04.360 [main] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+14:43:04.518 [main] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 144 ms. Found 6 JPA repository interfaces.
+14:43:05.953 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+14:43:05.978 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+14:43:05.987 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+14:43:05.988 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.19]
+14:43:06.173 [main] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/screening-app] - Initializing Spring embedded WebApplicationContext
+14:43:06.177 [main] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 3589 ms
+14:43:06.835 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+14:43:07.034 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+14:43:07.117 [main] INFO  org.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+14:43:07.485 [main] INFO  org.springframework.orm.jpa.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+14:43:07.523 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+14:43:07.871 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@3d01ea33
+14:43:07.873 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+14:43:09.708 [main] INFO  org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+14:43:09.862 [main] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+14:43:10.735 [main] INFO  org.springframework.data.jpa.repository.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+14:43:11.329 [main] WARN  org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'authenticationController': Unsatisfied dependency expressed through field 'senderService': Error creating bean with name 'emailServiceImpl': Unsatisfied dependency expressed through field 'javaMailSender': No qualifying bean of type 'org.springframework.mail.javamail.JavaMailSender' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
+14:43:11.331 [main] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+14:43:11.338 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+14:43:11.346 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+14:43:11.353 [main] INFO  org.apache.catalina.core.StandardService - Stopping service [Tomcat]
+14:43:11.399 [main] INFO  org.springframework.boot.autoconfigure.logging.ConditionEvaluationReportLogger - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+14:43:11.474 [main] ERROR org.springframework.boot.diagnostics.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Field javaMailSender in in.deloitte.screening.app.user.services.EmailServiceImpl required a bean of type 'org.springframework.mail.javamail.JavaMailSender' that could not be found.
+
+The injection point has the following annotations:
+	- @org.springframework.beans.factory.annotation.Autowired(required=true)
+
+
+Action:
+
+Consider defining a bean of type 'org.springframework.mail.javamail.JavaMailSender' in your configuration.
+
+14:43:38.112 [background-preinit] INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+14:43:38.182 [main] INFO  in.deloitte.screening.app.ScreeningAppApplication - Starting ScreeningAppApplication using Java 17.0.7 with PID 18264 (C:\Users\samrsawant\git\screening-app\screening-app\target\classes started by samrsawant in C:\Users\samrsawant\git\screening-app\screening-app)
+14:43:38.186 [main] INFO  in.deloitte.screening.app.ScreeningAppApplication - No active profile set, falling back to 1 default profile: "default"
+14:43:39.872 [main] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+14:43:40.020 [main] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 137 ms. Found 6 JPA repository interfaces.
+14:43:41.438 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+14:43:41.481 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+14:43:41.487 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+14:43:41.488 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.19]
+14:43:41.680 [main] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/screening-app] - Initializing Spring embedded WebApplicationContext
+14:43:41.683 [main] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 3429 ms
+14:43:42.384 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+14:43:42.551 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+14:43:42.645 [main] INFO  org.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+14:43:43.044 [main] INFO  org.springframework.orm.jpa.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+14:43:43.079 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+14:43:43.343 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@3bbc47c9
+14:43:43.346 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+14:43:45.026 [main] INFO  org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+14:43:45.139 [main] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+14:43:45.868 [main] INFO  org.springframework.data.jpa.repository.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+14:43:46.744 [main] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+14:43:49.134 [main] INFO  org.springframework.boot.actuate.endpoint.web.EndpointLinksResolver - Exposing 13 endpoint(s) beneath base path '/actuator'
+14:43:49.302 [main] INFO  org.springframework.security.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@1088b120, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6b4133d0, org.springframework.security.web.context.SecurityContextHolderFilter@c62d08a, org.springframework.security.web.header.HeaderWriterFilter@75ad7531, org.springframework.web.filter.CorsFilter@4ebefe31, org.springframework.security.web.authentication.logout.LogoutFilter@4bb747c1, in.deloitte.screening.app.security.JwtAuthenticationFilter@2287bbd1, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@75c8ba94, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@4c666872, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@4e1349cf, org.springframework.security.web.session.SessionManagementFilter@406ea770, org.springframework.security.web.access.ExceptionTranslationFilter@635900ef, org.springframework.security.web.access.intercept.AuthorizationFilter@616e7884]
+14:43:49.983 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+14:43:50.022 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/screening-app'
+14:43:50.042 [main] INFO  in.deloitte.screening.app.ScreeningAppApplication - Started ScreeningAppApplication in 12.387 seconds (process running for 13.77)
+14:45:33.291 [http-nio-8080-exec-1] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/screening-app] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+14:45:33.291 [http-nio-8080-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+14:45:33.293 [http-nio-8080-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+14:45:33.334 [http-nio-8080-exec-1] INFO  org.springframework.web.filter.OncePerRequestFilter - Invalid Header Value !! 
+14:45:33.782 [http-nio-8080-exec-1] ERROR in.deloitte.screening.app.exceptions.GlobalExceptionHandler - Global Exception :: ExceptionResponse [timeStamp=2024-03-07T14:45:33.781220400, status=500, error=null, friendlyMessage=Something is broken..., defaultMessage=No value present, exceptionType=java.util.NoSuchElementException, path=/screening-app/auth/signUp]
+14:45:56.534 [http-nio-8080-exec-4] INFO  org.springframework.web.filter.OncePerRequestFilter - Invalid Header Value !! 
+14:45:56.614 [http-nio-8080-exec-4] ERROR in.deloitte.screening.app.exceptions.GlobalExceptionHandler - Global Exception :: ExceptionResponse [timeStamp=2024-03-07T14:45:56.613342100, status=500, error=null, friendlyMessage=Something is broken..., defaultMessage=No value present, exceptionType=java.util.NoSuchElementException, path=/screening-app/auth/signUp]
+14:46:06.608 [background-preinit] INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+14:46:06.679 [main] INFO  in.deloitte.screening.app.ScreeningAppApplication - Starting ScreeningAppApplication using Java 17.0.7 with PID 20896 (C:\Users\samrsawant\git\screening-app\screening-app\target\classes started by samrsawant in C:\Users\samrsawant\git\screening-app\screening-app)
+14:46:06.684 [main] INFO  in.deloitte.screening.app.ScreeningAppApplication - No active profile set, falling back to 1 default profile: "default"
+14:46:08.368 [main] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+14:46:08.515 [main] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 135 ms. Found 6 JPA repository interfaces.
+14:46:09.872 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+14:46:09.897 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+14:46:09.904 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+14:46:09.905 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.19]
+14:46:10.103 [main] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/screening-app] - Initializing Spring embedded WebApplicationContext
+14:46:10.106 [main] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 3362 ms
+14:46:10.737 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+14:46:10.902 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+14:46:11.037 [main] INFO  org.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+14:46:11.432 [main] INFO  org.springframework.orm.jpa.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+14:46:11.467 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+14:46:11.729 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@fd0e118
+14:46:11.731 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+14:46:13.332 [main] INFO  org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+14:46:13.445 [main] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+14:46:14.127 [main] INFO  org.springframework.data.jpa.repository.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+14:46:14.997 [main] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+14:46:17.415 [main] INFO  org.springframework.boot.actuate.endpoint.web.EndpointLinksResolver - Exposing 13 endpoint(s) beneath base path '/actuator'
+14:46:17.596 [main] INFO  org.springframework.security.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@400cb9ef, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1405dd10, org.springframework.security.web.context.SecurityContextHolderFilter@510c6b9, org.springframework.security.web.header.HeaderWriterFilter@6245303e, org.springframework.web.filter.CorsFilter@30e29c0c, org.springframework.security.web.authentication.logout.LogoutFilter@2f48adcc, in.deloitte.screening.app.security.JwtAuthenticationFilter@67726dd1, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@71b75f99, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@5808573f, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@1dc9aba0, org.springframework.security.web.session.SessionManagementFilter@598b15ba, org.springframework.security.web.access.ExceptionTranslationFilter@4fd9deed, org.springframework.security.web.access.intercept.AuthorizationFilter@4ebefe31]
+14:46:18.365 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+14:46:18.405 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/screening-app'
+14:46:18.427 [main] INFO  in.deloitte.screening.app.ScreeningAppApplication - Started ScreeningAppApplication in 12.25 seconds (process running for 13.492)
+14:46:57.217 [http-nio-8080-exec-2] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/screening-app] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+14:46:57.218 [http-nio-8080-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+14:46:57.220 [http-nio-8080-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+14:46:57.266 [http-nio-8080-exec-2] INFO  org.springframework.web.filter.OncePerRequestFilter - Invalid Header Value !! 
+15:15:54.064 [main] INFO  org.springframework.test.context.support.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [in.deloitte.screening.app.ScreeningAppApplicationTests]: ScreeningAppApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+15:15:54.230 [main] INFO  org.springframework.boot.test.context.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration in.deloitte.screening.app.ScreeningAppApplication for test class in.deloitte.screening.app.ScreeningAppApplicationTests
+15:15:54.767 [background-preinit] INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+15:15:54.801 [main] INFO  in.deloitte.screening.app.ScreeningAppApplicationTests - Starting ScreeningAppApplicationTests using Java 17.0.7 with PID 5864 (started by samrsawant in C:\Users\samrsawant\git\screening-app\screening-app)
+15:15:54.806 [main] INFO  in.deloitte.screening.app.ScreeningAppApplicationTests - No active profile set, falling back to 1 default profile: "default"
+15:15:56.768 [main] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+15:15:56.931 [main] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 143 ms. Found 6 JPA repository interfaces.
+15:15:58.335 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+15:15:58.517 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+15:15:58.620 [main] INFO  org.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+15:15:59.050 [main] INFO  org.springframework.orm.jpa.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+15:15:59.093 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+15:15:59.404 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@6e1ad658
+15:15:59.408 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+15:16:01.328 [main] INFO  org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+15:16:01.468 [main] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+15:16:02.073 [main] INFO  org.springframework.data.jpa.repository.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+15:16:03.242 [main] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+15:16:05.878 [main] INFO  org.springframework.boot.actuate.endpoint.web.EndpointLinksResolver - Exposing 13 endpoint(s) beneath base path '/actuator'
+15:16:06.027 [main] INFO  org.springframework.security.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@25e95d04, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6b5dc4bb, org.springframework.security.web.context.SecurityContextHolderFilter@2175111e, org.springframework.security.web.header.HeaderWriterFilter@1dad97ed, org.springframework.web.filter.CorsFilter@46b376bb, org.springframework.security.web.authentication.logout.LogoutFilter@15aa3084, in.deloitte.screening.app.security.JwtAuthenticationFilter@511ba9c9, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@5f05cd7e, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@54980154, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@64a9719a, org.springframework.security.web.session.SessionManagementFilter@3c9cd930, org.springframework.security.web.access.ExceptionTranslationFilter@22120799, org.springframework.security.web.access.intercept.AuthorizationFilter@173039b5]
+15:16:07.068 [main] INFO  in.deloitte.screening.app.ScreeningAppApplicationTests - Started ScreeningAppApplicationTests in 12.612 seconds (process running for 14.65)
+15:16:08.077 [SpringApplicationShutdownHook] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+15:16:08.081 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+15:16:08.086 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.

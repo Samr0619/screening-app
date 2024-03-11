@@ -10,6 +10,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import in.deloitte.screening.app.user.dto.EmailDetailsDto;
+import in.deloitte.screening.app.user.entities.SignUpTable;
 
 @Service
 public class EmailServiceImpl implements EmailService {
@@ -29,7 +30,26 @@ public class EmailServiceImpl implements EmailService {
             mailMessage.setSubject(details.getSubject());
             javaMailSender.send(mailMessage);
         } catch (Exception ignored) {
-        	logger.debug(ignored.getMessage());
+        	logger.error("Error Occured while sending Mail : {} ",ignored.getMessage());
         }
+    }
+    
+    @Override
+    public EmailDetailsDto getEmailDetails(String email, SignUpTable user, Long otp) {
+        String content = "Dear " + user.getLogin().getUsername() + ", \n\n"
+                + "For security reason, you're required to use the following "
+                + "One Time Password to login: "
+                + otp
+                + "\nNote: this OTP is set to expire in 5 minutes."
+                + "\n\nRegards"
+                + "\nAdmin Team";
+
+        String subject = "Here's your One Time Password (OTP) - Expire in 5 minutes!";
+
+        EmailDetailsDto details = new EmailDetailsDto();
+        details.setRecipient(email);
+        details.setMsgBody(content);
+        details.setSubject(subject);
+        return details;
     }
 }

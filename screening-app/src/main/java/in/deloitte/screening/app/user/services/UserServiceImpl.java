@@ -1,6 +1,5 @@
 package in.deloitte.screening.app.user.services;
 
-
 import java.util.Date;
 import java.util.Optional;
 import java.util.Random;
@@ -33,202 +32,191 @@ import jakarta.transaction.Transactional;
 
 @Service
 public class UserServiceImpl implements UserService {
-    @Autowired
-    private LoginRepository loginRepository;
 
-    @Autowired
-    private UserRolesRepository userRolesRepository;
+	@Autowired
+	private LoginRepository loginRepository;
 
-    @Autowired
-    private SignUpRepository signUpRepository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+	@Autowired
+	private UserRolesRepository userRolesRepository;
 
-    @Autowired
-    private JWTHelper jwtHelper;
-    @Autowired
-    private UserDetailsService userDetailsService;
-    @Autowired
-    private AuthenticationManager authenticationManager;
+	@Autowired
+	private SignUpRepository signUpRepository;
 
-    @Override
-    @Transactional(rollbackOn = Exception.class)
-    public SignUpTable updatePassword(String currentPassword, String newPassword, String email) throws UserNotFoundException {
-        Optional<SignUpTable> user = signUpRepository.findByEmail(email);
-        if (user.isEmpty()) {
-            throw new UserNotFoundException("User with this email not Present in Database");
-        }
-        SignUpTable existingUser = user.get();
-        LoginTable login = existingUser.getLogin();
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
-        boolean isCurrentPasswordAndExistingPasswordMatches = passwordEncoder.matches(currentPassword, login.getPassword());
-        if (login.getPassword() != null) {
-            if (!isCurrentPasswordAndExistingPasswordMatches) {
-                throw new UserNotFoundException("Password does not match");
-            }
-            login.setPassword(newPassword);
-            login.setPassword(passwordEncoder.encode(newPassword));
-            existingUser.setLogin(login);
-        }
-        return signUpRepository.save(existingUser);
-    }
+	@Autowired
+	private JWTHelper jwtHelper;
 
+	@Autowired
+	private UserDetailsService userDetailsService;
 
-    @Override
-    @Transactional(rollbackOn = Exception.class)
-    public String SaveSignUp(SignUpDto bean) throws UserSignupException {
-    	
-    	 if (!bean.getPassword().equals(bean.getConfirmPassword())) {
-             throw new UserSignupException("Passwords do not match please chcek....");
-         }
+	@Autowired
+	private AuthenticationManager authenticationManager;
 
-        // TODO Auto-generated method stub
+	@Override
+	@Transactional(rollbackOn = Exception.class)
+	public SignUpTable updatePassword(String currentPassword, String newPassword, String email)
+			throws UserNotFoundException {
+		
+		Optional<SignUpTable> user = signUpRepository.findByEmail(email);
+		if (user.isEmpty()) {
+			throw new UserNotFoundException("User with this email not Present in Database");
+		}
+		SignUpTable existingUser = user.get();
+		LoginTable login = existingUser.getLogin();
 
-        if (signUpRepository.findByEmail(bean.getEmail()).orElse(null) != null) {
-            throw new UserSignupException("User Already Registered!");
-        }
-        
-        
+		boolean isCurrentPasswordAndExistingPasswordMatches = passwordEncoder.matches(currentPassword,
+				login.getPassword());
+		if (login.getPassword() != null) {
+			if (!isCurrentPasswordAndExistingPasswordMatches) {
+				throw new UserNotFoundException("Password does not match");
+			}
+			login.setPassword(newPassword);
+			login.setPassword(passwordEncoder.encode(newPassword));
+			existingUser.setLogin(login);
+		}
+		return signUpRepository.save(existingUser);
+	}
 
-//        if (!bean.getUsername().matches("[a-zA-Z0-9]+") || bean.getUsername().length() < 5) {
-//            throw new UserSignupException("Username must contain at least 5 alphanumeric characters.");
-//        }
-        
-        if (bean.getPassword().length() < 8) {
-            throw new UserSignupException("Password must be at least 8 characters long.");
-        }
-        if (!bean.getEmail().endsWith("@deloitte.com")) {
-            throw new UserSignupException("Email must belong to deloitte.com domain.");
-        }
-       
-        LoginTable login = new LoginTable();
-        login.setUserName(bean.getEmail().split("@")[0]);
-        login.setPassword(passwordEncoder.encode(bean.getPassword()));
-        UserRoles roles = userRolesRepository.findByRoleCode("2").get();
-        login.setRole(roles);
+	@Override
+	@Transactional(rollbackOn = Exception.class)
+	public String SaveSignUp(SignUpDto bean) throws UserSignupException {
 
-        login = loginRepository.save(login);
+		if (!bean.getPassword().equals(bean.getConfirmPassword())) {
+			throw new UserSignupException("Passwords do not match please chcek....");
+		}
 
-        // Create a SignUpTable entity
-        SignUpTable signUpTable = new SignUpTable();
-        signUpTable.setEmail(bean.getEmail());
-        signUpTable.setLogin(login);
+		if (signUpRepository.findByEmail(bean.getEmail()).orElse(null) != null) {
+			throw new UserSignupException("User Already Registered!");
+		}
 
-        signUpRepository.save(signUpTable);
+		if (bean.getPassword().length() < 8) {
+			throw new UserSignupException("Password must be at least 8 characters long.");
+		}
+		if (!bean.getEmail().endsWith("@deloitte.com")) {
+			throw new UserSignupException("Email must belong to deloitte.com domain.");
+		}
 
-        return "SUCCESS";
-    }
+		LoginTable login = new LoginTable();
+		login.setUserName(bean.getEmail().split("@")[0]);
+		login.setPassword(passwordEncoder.encode(bean.getPassword()));
+		UserRoles roles = userRolesRepository.findByRoleCode("002").get();
+		login.setRole(roles);
 
+		login = loginRepository.save(login);
 
-    public JWTResponse validateLogin(JWTRequest request) throws AuthorizationException {
-        JWTResponse response = null;
-        try {
-//            this.doAuthenticate(request.getUsername(), request.getPassString());
-//            UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
-//            String token = this.jwtHelper.generateToken(userDetails);
-//            response = new JWTResponse(token, userDetails.getUsername());
-//            response.setEmail(signUpRepository.findByLogin(
-//            		loginRepository.findByUserName(userDetails.getUsername()).get()
-//            		).get().getEmail());
-//        	SignUpTable signup=signUpRepository.findByEmail(request.getEmail()).orElse(null);
-//        	System.out.println("signup email : " + signup.getEmail());
-//        	System.out.println("signup id : " + signup.getSignUpId());
-//        	System.out.println("signup login id : " + signup.getLogin());
-//        	if(signup.getEmail() == null) {
-//        		System.out.println("Throwing exception...");
-//        		throw new AuthorizationException("Credentials Not Valid!");
-//        	}
-        	
-//        	this.doAuthenticate(request.getEmail(), request.getPassString());
-	          UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
-	          System.out.println("userDetails password : " + userDetails.getPassword());
-	          System.out.println("userDetails username : " + userDetails.getUsername());
-	          System.out.println("userDetails authorities : " + userDetails.getAuthorities());
-	          String token = this.jwtHelper.generateToken(userDetails);
-	          response = new JWTResponse(token, userDetails.getUsername());
-	          response.setEmail(signUpRepository.findByLogin(
-	          		loginRepository.findByUserName(userDetails.getUsername()).get()
-	          		).get().getEmail());
-        	
-            return response;
-        } catch (BadCredentialsException e) {
-            // TODO: handle exception
-            throw new AuthorizationException("Credentials Not Valid!");
-        }
-    }
+		// Create a SignUpTable entity
+		SignUpTable signUpTable = new SignUpTable();
+		signUpTable.setEmail(bean.getEmail());
+		signUpTable.setLogin(login);
 
-    @Override
-    public SignUpTable getUser(String email) throws UserNotFoundException {
-        Optional<SignUpTable> byEmail = signUpRepository.findByEmail(email);
-        if (byEmail.isEmpty()) {
-            throw new UserNotFoundException("User not Present in Database");
-        }
-        return byEmail.get();
-    }
+		signUpRepository.save(signUpTable);
 
-    private Authentication doAuthenticate(String email, String password) {
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(email, password);
-        return authenticationManager.authenticate(authentication);
-    }
+		return "SUCCESS";
+	}
 
-    @Override
-    public Long generateOtp(String email) throws UserNotFoundException {
-        if (Optional.ofNullable(signUpRepository.findByEmail(email)).isEmpty())
-            throw new UserNotFoundException("User with this email not Present in Database");
-        Random random = new Random();
-        return (long) (random.nextInt(900000) + 100000);
-    }
+	public JWTResponse validateLogin(JWTRequest request) throws AuthorizationException {
 
-    @Override
-    @Transactional(rollbackOn = Exception.class)
-    public void saveOtp(String email, Long otp) throws UserNotFoundException {
-        Optional<SignUpTable> userOptional = signUpRepository.findByEmail(email);
+		JWTResponse response = null;
+		try {
+			SignUpTable signup = signUpRepository.findByEmail(request.getEmail()).orElse(null);
+			if (signup == null) {
+				throw new AuthorizationException("Credentials Not Valid!");
+			}
+			this.doAuthenticate(signup.getLogin().getUsername(), request.getPassString());
+			UserDetails userDetails = userDetailsService.loadUserByUsername(signup.getLogin().getUsername());
+			String token = this.jwtHelper.generateToken(userDetails);
+			response = new JWTResponse(token, userDetails.getUsername());
+			response.setEmail(signUpRepository
+					.findByLogin(loginRepository.findByUserName(userDetails.getUsername()).get()).get().getEmail());
 
-        if (userOptional.isEmpty()) {
-            throw new UserNotFoundException("User with this email not Present in Database");
-        }
+			return response;
+		} catch (BadCredentialsException e) {
+			// TODO: handle exception
+			throw new AuthorizationException("Credentials Not Valid!");
+		}
 
-        SignUpTable user = userOptional.get();
-        user.setOtp(otp);
-        user.setOtpExpirationTime(new Date(System.currentTimeMillis()+5*60*1000));
-        signUpRepository.save(user);
-    }
+	}
 
-    @Override
-    @Transactional(rollbackOn = Exception.class)
-    public SignUpTable forgotPassword(ForgotPasswordRequest request) throws UserNotFoundException {
-        Optional<SignUpTable> userOptional =
-                Optional.ofNullable(signUpRepository.findByOtpAndEmail(request.getOtp(), request.getEmail()));
+	@Override
+	public SignUpTable getUser(String email) throws UserNotFoundException {
+		
+		Optional<SignUpTable> byEmail = signUpRepository.findByEmail(email);
+		if (byEmail.isEmpty()) {
+			throw new UserNotFoundException("User not Present in Database");
+		}
+		return byEmail.get();
+	}
 
-        if (userOptional.isEmpty()) {
-            throw new UserNotFoundException("Invalid OTP");
-        }
+	private Authentication doAuthenticate(String email, String password) {
+		
+		UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(email, password);
+		return authenticationManager.authenticate(authentication);
+	}
 
-        SignUpTable user = userOptional.get();
-        LoginTable loginTable = user.getLogin();
-        loginTable.setPassword(request.getPassword());
-        loginTable.setPassword(passwordEncoder.encode(loginTable.getPassword()));
-        user.setLogin(loginTable);
-        user.setOtp(null);
-        user.setOtpExpirationTime(null);
-        signUpRepository.save(user);
+	@Override
+	public Long generateOtp(String email) throws UserNotFoundException {
+		
+		if (Optional.ofNullable(signUpRepository.findByEmail(email)).isEmpty())
+			throw new UserNotFoundException("User with this email not Present in Database");
+		Random random = new Random();
+		return (long) (random.nextInt(900000) + 100000);
+	}
 
-        return user;
-    }
+	@Override
+	@Transactional(rollbackOn = Exception.class)
+	public void saveOtp(String email, Long otp) throws UserNotFoundException {
+		
+		Optional<SignUpTable> userOptional = signUpRepository.findByEmail(email);
 
-    @Override
-    public String validateOTP(Long otp) throws UserNotFoundException {
-        Optional<SignUpTable> userOp = Optional.ofNullable(signUpRepository.findByOtp(otp));
+		if (userOptional.isEmpty()) {
+			throw new UserNotFoundException("User with this email not Present in Database");
+		}
 
-        if (userOp.isEmpty()) {
-            throw new UserNotFoundException("Invalid OTP");
-        }
-        SignUpTable user = userOp.get();
+		SignUpTable user = userOptional.get();
+		user.setOtp(otp);
+		user.setOtpExpirationTime(new Date(System.currentTimeMillis() + 5 * 60 * 1000));
+		signUpRepository.save(user);
+	}
 
-        if (user.getOtpExpirationTime().before(new Date())) {
-            user.setOtp(null);
-            throw new UserNotFoundException("Your OTP is expired. Create a new OTP if you want to Proceed.");
-        }
-        return "OTP Validated Successfully.";
-    }
+	@Override
+	@Transactional(rollbackOn = Exception.class)
+	public SignUpTable forgotPassword(ForgotPasswordRequest request) throws UserNotFoundException {
+		
+		Optional<SignUpTable> userOptional = Optional
+				.ofNullable(signUpRepository.findByOtpAndEmail(request.getOtp(), request.getEmail()));
+
+		if (userOptional.isEmpty()) {
+			throw new UserNotFoundException("Invalid OTP");
+		}
+
+		SignUpTable user = userOptional.get();
+		LoginTable loginTable = user.getLogin();
+		loginTable.setPassword(request.getPassword());
+		loginTable.setPassword(passwordEncoder.encode(loginTable.getPassword()));
+		user.setLogin(loginTable);
+		user.setOtp(null);
+		user.setOtpExpirationTime(null);
+		signUpRepository.save(user);
+
+		return user;
+	}
+
+	@Override
+	public String validateOTP(Long otp) throws UserNotFoundException {
+		
+		Optional<SignUpTable> userOp = Optional.ofNullable(signUpRepository.findByOtp(otp));
+
+		if (userOp.isEmpty()) {
+			throw new UserNotFoundException("Invalid OTP");
+		}
+		SignUpTable user = userOp.get();
+
+		if (user.getOtpExpirationTime().before(new Date())) {
+			user.setOtp(null);
+			throw new UserNotFoundException("Your OTP is expired. Create a new OTP if you want to Proceed.");
+		}
+		return "OTP Validated Successfully.";
+	}
 }

@@ -30,14 +30,19 @@ public class ApplicantController {
 	@Autowired
 	ApplicantService applicantService;
 	
-
-	@GetMapping("/search/matching/profiles")
-	public ResponseEntity<List<SearchProfilesResponse>> searchProfiles(
+	/**
+	 *  
+	 * @param searchProfilesRequest
+	 * @param jobDescriptionFile
+	 * @return
+	 * @throws IOException
+	 */
+	@GetMapping("/profiles")
+	public ResponseEntity<List<SearchProfilesResponse>> searchMatchingProfiles(
 											@RequestPart("text") SearchProfilesRequest searchProfilesRequest,
 											@RequestPart(name = "file", required = false) MultipartFile jobDescriptionFile)
 													throws IOException{
 		
-		logger.info("Execution started @GetMapping(/search/matching/profiles)...");
 		logger.info("Search profile request text : {}", Mapper.mapToJsonString(searchProfilesRequest));
 		logger.info("Search profile request JD file : {}", jobDescriptionFile.getOriginalFilename());
 		

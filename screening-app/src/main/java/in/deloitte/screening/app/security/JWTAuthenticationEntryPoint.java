@@ -20,8 +20,6 @@ public class JWTAuthenticationEntryPoint implements AuthenticationEntryPoint{
 			AuthenticationException authException) throws IOException, ServletException {
 		// TODO Auto-generated method stub
 		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-		//PrintWriter pw = response.getWriter();
-		//pw.println("Access Denied !! : "+authException.getMessage());
 		
 		 ErrorResponse errorResponse = new ErrorResponse("Access Denied !! : "+authException.getMessage(), authException.getMessage());
 	        String jsonResponse = new ObjectMapper().writeValueAsString(errorResponse);

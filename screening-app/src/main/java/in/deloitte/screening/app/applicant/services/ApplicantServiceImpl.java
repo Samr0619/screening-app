@@ -224,7 +224,6 @@ public class ApplicantServiceImpl implements ApplicantService {
 
 		while (matcher.find()) {
 			mobile = matcher.group();
-			System.out.println("mobile : " + mobile);
 			break;
 		}
 

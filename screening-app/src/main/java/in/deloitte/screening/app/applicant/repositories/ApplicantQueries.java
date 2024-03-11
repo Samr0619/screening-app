@@ -16,8 +16,7 @@ public class ApplicantQueries {
 							  .map(skill -> prefix+skill+suffix).collect(Collectors.joining());
 
 		String query = queryConstant + values.substring(0, values.length()-5);
-		System.out.println("query : " + query);
-
+	
 		return queryConstant + values + "job_title = '" + request.getJobTitle() + "'" + " AND DATE(uploaded_time) between '" + request.getFromDate() + "' AND '" + request.getToDate() + "' ORDER BY email";
 	}
 	

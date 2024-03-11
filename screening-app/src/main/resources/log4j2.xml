@@ -7,7 +7,7 @@
         </Console>
 
         <!-- Debug File Appender -->
-        <RollingFile name="DebugFile" fileName="log/debug.log" filePattern="logs/debug-%d{yyyy-MM-dd}.log">
+        <!-- <RollingFile name="DebugFile" fileName="log/debug.log" filePattern="logs/debug-%d{yyyy-MM-dd}.log">
             <ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY" />
             <PatternLayout>
                 <Pattern>%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n</Pattern>
@@ -15,10 +15,10 @@
             <Policies>
                 <TimeBasedTriggeringPolicy />
             </Policies>
-        </RollingFile>
+        </RollingFile> -->
 
         <!-- Error File Appender -->
-        <RollingFile name="ErrorFile" fileName="log/error.log" filePattern="logs/error-%d{yyyy-MM-dd}.log">
+<!--         <RollingFile name="ErrorFile" fileName="log/application.log" filePattern="logs/error-%d{yyyy-MM-dd}.log">
             <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY" />
             <PatternLayout>
                 <Pattern>%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n</Pattern>
@@ -27,9 +27,9 @@
                 <TimeBasedTriggeringPolicy />
             </Policies>
         </RollingFile>
-
+ -->
         <!-- Info File Appender -->
-        <RollingFile name="InfoFile" fileName="log/info.log" filePattern="logs/info-%d{yyyy-MM-dd}.log">
+        <RollingFile name="InfoFile" fileName="log/application.log" filePattern="logs/info-%d{yyyy-MM-dd}.log">
             <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY" />
             <PatternLayout>
                 <Pattern>%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n</Pattern>
