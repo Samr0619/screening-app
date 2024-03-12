@@ -1,4 +1,4 @@
-package in.deloitte.screening.app.resume.document.repositories;
+package in.deloitte.screening.app.document.repositories;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import in.deloitte.screening.app.resume.document.entities.Resume;
+import in.deloitte.screening.app.document.entities.Resume;
 
 
 @Repository

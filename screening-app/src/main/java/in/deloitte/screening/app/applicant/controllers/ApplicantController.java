@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,7 +38,7 @@ public class ApplicantController {
 	 * @return
 	 * @throws IOException
 	 */
-	@GetMapping("/profiles")
+	@PostMapping("/profiles")
 	public ResponseEntity<List<SearchProfilesResponse>> searchMatchingProfiles(
 											@RequestPart("text") SearchProfilesRequest searchProfilesRequest,
 											@RequestPart(name = "file", required = false) MultipartFile jobDescriptionFile)
@@ -46,7 +47,7 @@ public class ApplicantController {
 		logger.info("Search profile request text : {}", Mapper.mapToJsonString(searchProfilesRequest));
 		logger.info("Search profile request JD file : {}", jobDescriptionFile.getOriginalFilename());
 		
-		if(searchProfilesRequest.getJobDescriptionText().equals("") && jobDescriptionFile.isEmpty()) {
+		if(searchProfilesRequest.getJobDescriptionText().length()==0 && jobDescriptionFile.isEmpty()) {
 			throw new BadInputException("Job description is missing, Please send Job description as text OR file...");
 		}
 		

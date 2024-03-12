@@ -1,4 +1,4 @@
-package in.deloitte.screening.app.resume.document.entities;
+package in.deloitte.screening.app.document.entities;
 
 import java.time.LocalDateTime;
 

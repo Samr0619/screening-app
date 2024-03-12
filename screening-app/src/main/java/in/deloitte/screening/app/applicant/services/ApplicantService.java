@@ -8,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import in.deloitte.screening.app.applicant.dto.SearchProfilesRequest;
 import in.deloitte.screening.app.applicant.dto.SearchProfilesResponse;
-import in.deloitte.screening.app.resume.document.dto.UploadResumesResponse;
+import in.deloitte.screening.app.document.dto.UploadResumesResponse;
 
 
 @Service

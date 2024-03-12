@@ -19,7 +19,6 @@ import org.apache.logging.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.CharArraySet;
 import org.apache.lucene.analysis.core.StopAnalyzer;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -32,17 +31,16 @@ import in.deloitte.screening.app.applicant.entities.Applicant;
 import in.deloitte.screening.app.applicant.entities.ApplicantResume;
 import in.deloitte.screening.app.applicant.repositories.ApplicantQueries;
 import in.deloitte.screening.app.applicant.repositories.ApplicantRepository;
+import in.deloitte.screening.app.document.dto.UploadResumesResponse;
+import in.deloitte.screening.app.document.entities.Resume;
+import in.deloitte.screening.app.document.entities.ResumeDownloadedUserInfo;
+import in.deloitte.screening.app.document.repositories.ResumeRepository;
+import in.deloitte.screening.app.document.services.CosineSimilarityCalculationService;
+import in.deloitte.screening.app.document.utils.DocumentContentAnalyzer;
+import in.deloitte.screening.app.document.utils.DocumentContentExtractionService;
+import in.deloitte.screening.app.document.utils.VectorizeDocumentContent;
 import in.deloitte.screening.app.exceptions.DataNotFoundException;
-import in.deloitte.screening.app.resume.document.dto.UploadResumesResponse;
-import in.deloitte.screening.app.resume.document.entities.Resume;
-import in.deloitte.screening.app.resume.document.entities.ResumeDownloadedUserInfo;
-import in.deloitte.screening.app.resume.document.repositories.ResumeRepository;
-import in.deloitte.screening.app.resume.document.services.CosineSimilarityCalculationService;
-import in.deloitte.screening.app.resume.document.services.DocumentContentAnalyzer;
-import in.deloitte.screening.app.resume.document.services.DocumentContentExtractionService;
-import in.deloitte.screening.app.resume.document.services.VectorizeDocumentContent;
 import in.deloitte.screening.app.skills.repositories.SkillsRepository;
-
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 

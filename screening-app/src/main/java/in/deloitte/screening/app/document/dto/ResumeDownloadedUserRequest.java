@@ -1,4 +1,4 @@
-package in.deloitte.screening.app.resume.document.dto;
+package in.deloitte.screening.app.document.dto;
 
 
 public class ResumeDownloadedUserRequest {

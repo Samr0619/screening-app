@@ -1,6 +1,6 @@
 package in.deloitte.screening.app.applicant.entities;
 
-import in.deloitte.screening.app.resume.document.entities.Resume;
+import in.deloitte.screening.app.document.entities.Resume;
 
 
 public class ApplicantResume {

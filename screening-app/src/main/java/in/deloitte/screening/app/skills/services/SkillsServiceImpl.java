@@ -26,4 +26,14 @@ public class SkillsServiceImpl implements SkillsService {
 		return skillsRepository.saveAll(skillList);
 	}
 
+	@Override
+	public List<String> getAllSkills() {
+		
+		return skillsRepository.findAll()
+							   .stream()
+							   .map(skill -> skill.getSkillName())
+							   .distinct()
+							   .toList();
+	}
+	
 }

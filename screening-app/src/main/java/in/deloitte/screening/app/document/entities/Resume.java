@@ -1,9 +1,11 @@
-package in.deloitte.screening.app.resume.document.entities;
+package in.deloitte.screening.app.document.entities;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -12,6 +14,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 
 @Entity
 public class Resume {
@@ -43,6 +48,11 @@ public class Resume {
 	
 	@ElementCollection
 	private List<ResumeDownloadedUserInfo> downloads;
+	
+	@ManyToMany
+	@JoinTable(name = "resume_jd", joinColumns = @JoinColumn(name = "resume_id"),
+	inverseJoinColumns = @JoinColumn(name = "jobDescription_id"))
+	private Set<JobDescription> jd = new HashSet<>();
 	
 
 	/**
@@ -185,6 +195,20 @@ public class Resume {
 		this.downloads = downloads;
 	}
 	
+	/**
+	 * @return the jd
+	 */
+	public Set<JobDescription> getJd() {
+		return jd;
+	}
+
+	/**
+	 * @param jd the jd to set
+	 */
+	public void setJd(Set<JobDescription> jd) {
+		this.jd = jd;
+	}
+
 	public Resume() {
 		
 	}
@@ -206,6 +230,15 @@ public class Resume {
 	public String toString() {
 		return "Resume [id=" + id + ", email=" + email + ", resumeFile=" + Arrays.toString(resumeFile) + ", docType="
 				+ docType + ", uploadedBy=" + uploadedBy + ", uploadTime=" + uploadTime + ", text=" + text + ", vector="
-				+ vector + "]";
+				+ vector + ", downloads=" + downloads + ", jd=" + jd + "]";
 	}
+
+//	@Override
+//	public String toString() {
+//		return "Resume [id=" + id + ", email=" + email + ", resumeFile=" + Arrays.toString(resumeFile) + ", docType="
+//				+ docType + ", uploadedBy=" + uploadedBy + ", uploadTime=" + uploadTime + ", text=" + text + ", vector="
+//				+ vector + "]";
+//	}
+	
+	
 }

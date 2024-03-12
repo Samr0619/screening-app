@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-import in.deloitte.screening.app.resume.document.entities.ResumeDownloadedUserInfo;
+import in.deloitte.screening.app.document.entities.ResumeDownloadedUserInfo;
 
 public class SearchProfilesResponse {
 

@@ -1,4 +1,4 @@
-package in.deloitte.screening.app.resume.document.services;
+package in.deloitte.screening.app.document.services;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -9,6 +9,10 @@ import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import in.deloitte.screening.app.document.utils.DocumentContentAnalyzer;
+import in.deloitte.screening.app.document.utils.DocumentContentExtractionService;
+import in.deloitte.screening.app.document.utils.VectorizeDocumentContent;
 
 
 @Service

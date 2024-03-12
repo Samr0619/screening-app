@@ -1,4 +1,4 @@
-package in.deloitte.screening.app.resume.document.services;
+package in.deloitte.screening.app.document.services;
 
 import java.time.LocalDateTime;
 
@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import in.deloitte.screening.app.resume.document.dto.ResumeDownloadedUserRequest;
-import in.deloitte.screening.app.resume.document.entities.ResumeDownloadedUserInfo;
-import in.deloitte.screening.app.resume.document.repositories.ResumeRepository;
+import in.deloitte.screening.app.document.dto.ResumeDownloadedUserRequest;
+import in.deloitte.screening.app.document.entities.ResumeDownloadedUserInfo;
+import in.deloitte.screening.app.document.repositories.ResumeRepository;
 
 @Service
 public class ResumeServiceImpl implements ResumeService {
