@@ -1,4 +1,4 @@
-package in.deloitte.screening.app.resume.document.services;
+package in.deloitte.screening.app.document.utils;
 
 import java.io.IOException;
 
