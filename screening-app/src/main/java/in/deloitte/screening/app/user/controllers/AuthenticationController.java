@@ -50,12 +50,12 @@ public class AuthenticationController {
      * @return
      */
     @PutMapping("/send-otp")
-    public ResponseEntity<?> sentOTPForForgotUserPassword(@RequestParam String email) {
+    public ResponseEntity<MessageResponse> sentOTPForForgotUserPassword(@RequestBody SendOtpRequestDto req) {
 
-        Long otp = userService.generateOtp(email);
-        userService.saveOtp(email, otp);
-        SignUpTable user = userService.getUser(email);
-        EmailDetailsDto details = senderService.getEmailDetails(email, user, otp);
+        Long otp = userService.generateOtp(req.email());
+        userService.saveOtp(req.email(), otp);
+        SignUpTable user = userService.getUser(req.email());
+        EmailDetailsDto details = senderService.getEmailDetails(req.email(), user, otp);
         senderService.sendEmail(details);
 
         MessageResponse response = new MessageResponse();
@@ -72,11 +72,11 @@ public class AuthenticationController {
         return new ResponseEntity<>(userService.forgotPassword(request), HttpStatus.OK);
     }
 
-    @GetMapping("/validate-otp")
-    public ResponseEntity<?> validateOtp(@RequestParam Long otp, @RequestParam String email) throws UserNotFoundException {
+    @PostMapping("/validate-otp")
+    public ResponseEntity<?> validateOtp(@RequestBody ValidateOtpRequestDto req) throws UserNotFoundException {
 
         MessageResponse response = new MessageResponse();
-        String res = userService.validateOTP(otp, email);
+        String res = userService.validateOTP(req.otp(), req.email());
         response.setStatus("Success");
         response.setMessage(res);
         response.setTimeStamp(LocalDateTime.now());

@@ -36,8 +36,10 @@ public class SecurityConfig {
 						 "/actuator/**").permitAll()
 						.requestMatchers("/user/**",
 								"/applicant/**",
-								"/resumes/**",
-								"/skills/**"
+								"/resume/**",
+								"/skills/**",
+								"/jd/**",
+								"/upload/**"
 								)
 						.hasAnyAuthority("User", "Admin").anyRequest().authenticated())
 				.exceptionHandling(excpt -> excpt.authenticationEntryPoint(authEntrypoint))
