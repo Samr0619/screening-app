@@ -1,115 +1,120 @@
 package in.deloitte.screening.app.user.entities;
 
-import java.util.Collection;
-import java.util.List;
-
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "login_table")
-public class LoginTable implements UserDetails{
+public class LoginTable implements UserDetails {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "login_id")
-	private Long loginId;
-	
-	@Column(name = "user_name", unique = true)
-	private String userName;
-	
-	@Column(name = "password")
-	private String password;
-	
-	@ManyToOne
-	@JoinColumn(name ="role_id")
-	@JsonBackReference
-	private UserRoles role;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "login_id")
+    private Long loginId;
 
-	public Long getLoginId() {
-		return loginId;
-	}
+    @Column(name = "user_name", unique = true)
+    private String userName;
 
-	public void setLoginId(Long loginId) {
-		this.loginId = loginId;
-	}
+    @Column(name = "password")
+    private String password;
 
-	public String getUserName() {
-		return userName;
-	}
+    public LoginTable(String userName, String password) {
+        this.userName = userName;
+        this.password = password;
+    }
 
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
+    public LoginTable() {
+    }
 
-	public String getPassword() {
-		return password;
-	}
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    @JsonBackReference
+    private UserRoles role;
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public Long getLoginId() {
+        return loginId;
+    }
 
-	public UserRoles getRole() {
-		return role;
-	}
+    public void setLoginId(Long loginId) {
+        this.loginId = loginId;
+    }
 
-	public void setRole(UserRoles role) {
-		this.role = role;
-	}
+    public String getUserName() {
+        return userName;
+    }
 
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		// TODO Auto-generated method stub
-		return List.of(new SimpleGrantedAuthority(role.getRoleShortName()));
-	}
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
-	@Override
-	public String getUsername() {
-		// TODO Auto-generated method stub
-		return this.userName;
-	}
+    public String getPassword() {
+        return password;
+    }
 
-	@Override
-	public boolean isAccountNonExpired() {
-		// TODO Auto-generated method stub
-		return true;
-	}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	@Override
-	public boolean isAccountNonLocked() {
-		// TODO Auto-generated method stub
-		return true;
-	}
+    public UserRoles getRole() {
+        return role;
+    }
 
-	@Override
-	public boolean isCredentialsNonExpired() {
-		// TODO Auto-generated method stub
-		return true;
-	}
+    public void setRole(UserRoles role) {
+        this.role = role;
+    }
 
-	@Override
-	public boolean isEnabled() {
-		// TODO Auto-generated method stub
-		return true;
-	}
-	
-	
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        // TODO Auto-generated method stub
+        return List.of(new SimpleGrantedAuthority(role.getRoleShortName()));
+    }
+
+    @Override
+    public String getUsername() {
+        // TODO Auto-generated method stub
+        return this.userName;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        // TODO Auto-generated method stub
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        // TODO Auto-generated method stub
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        // TODO Auto-generated method stub
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        // TODO Auto-generated method stub
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "LoginTable{" +
+                "userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
 }

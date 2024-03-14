@@ -57,7 +57,6 @@ public class UserServiceImpl implements UserService {
     @Transactional(rollbackOn = Exception.class)
     public SignUpTable updatePassword(String currentPassword, String newPassword, String email)
             throws UserNotFoundException {
-
         Optional<SignUpTable> user = signUpRepository.findByEmail(email);
         if (user.isEmpty()) {
             throw new UserNotFoundException("User with this email not Present in Database");
@@ -129,7 +128,6 @@ public class UserServiceImpl implements UserService {
             response = new JWTResponse(token, userDetails.getUsername());
             response.setEmail(signUpRepository
                     .findByLogin(loginRepository.findByUserName(userDetails.getUsername()).get()).get().getEmail());
-
             return response;
         } catch (BadCredentialsException e) {
             // TODO: handle exception
@@ -148,9 +146,9 @@ public class UserServiceImpl implements UserService {
         return byEmail.get();
     }
 
-    private Authentication doAuthenticate(String email, String password) {
+    private Authentication doAuthenticate(String userName, String password) {
 
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(email, password);
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userName, password);
         return authenticationManager.authenticate(authentication);
     }
 
@@ -183,8 +181,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(rollbackOn = Exception.class)
     public SignUpTable forgotPassword(ForgotPasswordRequest request) throws UserNotFoundException {
 
-        Optional<SignUpTable> userOptional = Optional
-                .ofNullable(signUpRepository.findByOtpAndEmail(request.getOtp(), request.getEmail()));
+        Optional<SignUpTable> userOptional = signUpRepository.findByOtpAndEmail(request.getOtp(), request.getEmail());
  
 //        if (userOptional.isEmpty()) {
 //            throw new UserNotFoundException("Invalid OTP");
@@ -217,7 +214,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public String validateOTP(Long otp, String email) throws UserNotFoundException {
 
-        Optional<SignUpTable> userOp = Optional.ofNullable(signUpRepository.findByOtpAndEmail(otp, email));
+        Optional<SignUpTable> userOp = signUpRepository.findByOtpAndEmail(otp, email);
 
         if (userOp.isEmpty()) {
             throw new UserNotFoundException("Invalid OTP or User with this email is not Present in Database.");

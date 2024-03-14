@@ -20,6 +20,16 @@ public class UserRoles {
     @Column(name = "role_code", unique = true)
     private String roleCode;
 
+    public UserRoles(Long roleId, String roleDesc, String roleShortName, String roleCode) {
+        this.roleId = roleId;
+        this.roleDesc = roleDesc;
+        this.roleShortName = roleShortName;
+        this.roleCode = roleCode;
+    }
+
+    public UserRoles() {
+    }
+
     public Long getRoleId() {
         return roleId;
     }

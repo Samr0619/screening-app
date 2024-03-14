@@ -42,7 +42,7 @@ public class AuthenticationController {
         response.setMessage("User Sign Up Successfully");
         response.setTimeStamp(LocalDateTime.now());
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     /**

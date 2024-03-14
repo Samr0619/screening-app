@@ -2,6 +2,7 @@ package in.deloitte.screening.app.user.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+
 import java.util.Date;
 
 @Entity
@@ -63,5 +64,13 @@ public class SignUpTable {
 
     public void setOtpExpirationTime(Date otpExpirationTime) {
         this.otpExpirationTime = otpExpirationTime;
+    }
+
+    @Override
+    public String toString() {
+        return "SignUpTable{" +
+                "email='" + email + '\'' +
+                ", login=" + login +
+                '}';
     }
 }

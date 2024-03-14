@@ -11,7 +11,6 @@ public interface SignUpRepository extends JpaRepository<SignUpTable, Long> {
 
     Optional<SignUpTable> findByLogin(LoginTable login);
 
-    SignUpTable findByOtpAndEmail(Long otp, String email);
-//    SignUpTable findByOtp(Long otp);
+    Optional<SignUpTable> findByOtpAndEmail(Long otp, String email);
 }
 
