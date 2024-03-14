@@ -185,7 +185,7 @@ public class UserServiceImpl implements UserService {
 
         Optional<SignUpTable> userOptional = Optional
                 .ofNullable(signUpRepository.findByOtpAndEmail(request.getOtp(), request.getEmail()));
-
+ 
 //        if (userOptional.isEmpty()) {
 //            throw new UserNotFoundException("Invalid OTP");
 //        }
