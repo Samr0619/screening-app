@@ -57,6 +57,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(rollbackOn = Exception.class)
     public SignUpTable updatePassword(String currentPassword, String newPassword, String email)
             throws UserNotFoundException {
+
         Optional<SignUpTable> user = signUpRepository.findByEmail(email);
         if (user.isEmpty()) {
             throw new UserNotFoundException("User with this email not Present in Database");
@@ -181,7 +182,8 @@ public class UserServiceImpl implements UserService {
     @Transactional(rollbackOn = Exception.class)
     public SignUpTable forgotPassword(ForgotPasswordRequest request) throws UserNotFoundException {
 
-        Optional<SignUpTable> userOptional = signUpRepository.findByOtpAndEmail(request.getOtp(), request.getEmail());
+        Optional<SignUpTable> userOptional = signUpRepository.findByOtpAndEmail(request.getOtp(), 
+        		request.getEmail());
  
 //        if (userOptional.isEmpty()) {
 //            throw new UserNotFoundException("Invalid OTP");
@@ -198,10 +200,7 @@ public class UserServiceImpl implements UserService {
             throw new UserNotFoundException("Your OTP is expired. Create a new OTP if you want to Proceed.");
         }
 
-        //SignUpTable user = userOptional.get();
         LoginTable loginTable = user.getLogin();
-     //   loginTable.setPassword(request.getPassword());
-        System.out.println("New Password :: "+request.getPassword());
         loginTable.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setLogin(loginTable);
         user.setOtp(null);
