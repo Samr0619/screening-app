@@ -31,11 +31,11 @@ public class JobDescription {
 	@Column(name = "jd_file")
 	private byte [] jdFile;
 	
-	@Column(name = "jd_text")
+	@Column(name = "jd_text", length = 100000)
 	private String jdText;
 	
 	@Convert(converter = MapToJson.class)
-	@Column(name = "jd_vector")
+	@Column(name = "jd_vector", length = 100000)
 	private Map<String, Long> jdVector;
 	
 	@Column(name = "uploaded_by")

@@ -14,4 +14,6 @@ public interface SkillsService {
 	public List<Skills> addSkills(AddSkillsRequest addSkillsRequest);
 	
 	public List<String> getAllSkills();
+	
+	public List<Skills> findBySkillName(String skill);
 }

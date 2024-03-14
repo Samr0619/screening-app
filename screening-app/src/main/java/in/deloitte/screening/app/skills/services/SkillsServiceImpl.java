@@ -35,5 +35,11 @@ public class SkillsServiceImpl implements SkillsService {
 							   .distinct()
 							   .toList();
 	}
+
+	@Override
+	public List<Skills> findBySkillName(String skill) {
+		// TODO Auto-generated method stub
+		return skillsRepository.findBySkillName(skill);
+	}
 	
 }

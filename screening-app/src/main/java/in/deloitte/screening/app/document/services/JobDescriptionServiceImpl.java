@@ -17,13 +17,17 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import in.deloitte.screening.app.document.dto.SearchJdResponse;
 import in.deloitte.screening.app.document.dto.UploadJdResponse;
 import in.deloitte.screening.app.document.entities.JobDescription;
+import in.deloitte.screening.app.document.repositories.DocumentQueries;
 import in.deloitte.screening.app.document.repositories.JobDescriptionRepository;
 import in.deloitte.screening.app.document.utils.DocumentContentAnalyzer;
 import in.deloitte.screening.app.document.utils.DocumentContentExtractionService;
 import in.deloitte.screening.app.document.utils.VectorizeDocumentContent;
 import in.deloitte.screening.app.skills.repositories.SkillsRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 
 @Service
@@ -50,6 +54,9 @@ public class JobDescriptionServiceImpl implements JobDescriptionService {
 	
 	@Autowired
 	VectorizeDocumentContent vectorizeJdContent;
+	
+	@PersistenceContext
+	private EntityManager entityManager;
 
 	@Override
 	public UploadJdResponse saveJobDescription(MultipartFile jd, String userEmail) throws IOException {
@@ -90,4 +97,12 @@ public class JobDescriptionServiceImpl implements JobDescriptionService {
 		return new UploadJdResponse(message, jdFileName.substring(0, jdFileName.indexOf(".")));
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<SearchJdResponse> getAllJdInfo(String jdFileName) {
+			
+		return entityManager
+				.createNativeQuery(DocumentQueries.createJdResultsQuery(jdFileName), SearchJdResponse.class)
+				.getResultList();
+	}
 }

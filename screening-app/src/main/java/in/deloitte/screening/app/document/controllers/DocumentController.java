@@ -64,12 +64,14 @@ public class DocumentController {
 	@PostMapping("/jd")
 	public ResponseEntity<UploadJdResponse> saveJobDescription(
 							@RequestPart("jd") MultipartFile jd, 
-							@RequestPart("email") String userEmail) throws IOException {
-		
+							@RequestPart("email") String userEmail,
+							@RequestPart("jd_desc") String jd_desc,
+							@RequestPart("requi_no") String requi_no) throws IOException {
+		System.out.println("JD : "+jd_desc+" req : "+requi_no+" file : "+jd.getOriginalFilename());
 		if(jd.isEmpty()) {
 			throw new BadInputException("No Job Description found, Please upload it");
 		}
-		else if(!jd.getOriginalFilename().endsWith(".pdf") || !jd.getOriginalFilename().endsWith(".docx")) {
+		else if(!jd.getOriginalFilename().endsWith(".pdf") && !jd.getOriginalFilename().endsWith(".docx")) {
 			throw new BadInputException("Unsupported file format : " + jd.getOriginalFilename().substring(jd.getOriginalFilename().indexOf(".")+1).toUpperCase() + ", only pdf or docx are acceptable...");
 		}
 		else if(userEmail.equals("\"\"") || userEmail == null) {

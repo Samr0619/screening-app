@@ -195,15 +195,17 @@ public class ApplicantServiceImpl implements ApplicantService {
 	 */
 	public String getExperience(String cvContent) {
 
-		String experience = "";
+		String experience = "1";
 		int expIndex = cvContent.indexOf("years");
-
-		for (int i = expIndex - 2; i >= expIndex - 7; i--) {
-			if (cvContent.charAt(i) == ' ')
-				break;
-			experience = cvContent.charAt(i) + experience;
+		
+		if(expIndex>8) {
+			for (int i = expIndex - 2; i >= expIndex - 7; i--) {
+				if (cvContent.charAt(i) == ' ')
+					break;
+				experience = cvContent.charAt(i) + experience;
+			}
 		}
-
+		
 		return experience;
 	}
 

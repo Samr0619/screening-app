@@ -186,14 +186,26 @@ public class UserServiceImpl implements UserService {
         Optional<SignUpTable> userOptional = Optional
                 .ofNullable(signUpRepository.findByOtpAndEmail(request.getOtp(), request.getEmail()));
 
+//        if (userOptional.isEmpty()) {
+//            throw new UserNotFoundException("Invalid OTP");
+//        }
+        
         if (userOptional.isEmpty()) {
-            throw new UserNotFoundException("Invalid OTP");
+            throw new UserNotFoundException("Invalid OTP or User with this email is not Present in Database.");
+        }
+       
+        SignUpTable user = userOptional.get();
+
+        if (user.getOtpExpirationTime().before(new Date())) {
+            user.setOtp(null);
+            throw new UserNotFoundException("Your OTP is expired. Create a new OTP if you want to Proceed.");
         }
 
-        SignUpTable user = userOptional.get();
+        //SignUpTable user = userOptional.get();
         LoginTable loginTable = user.getLogin();
-        loginTable.setPassword(request.getPassword());
-        loginTable.setPassword(passwordEncoder.encode(loginTable.getPassword()));
+     //   loginTable.setPassword(request.getPassword());
+        System.out.println("New Password :: "+request.getPassword());
+        loginTable.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setLogin(loginTable);
         user.setOtp(null);
         user.setOtpExpirationTime(null);
@@ -214,8 +226,12 @@ public class UserServiceImpl implements UserService {
 
         if (user.getOtpExpirationTime().before(new Date())) {
             user.setOtp(null);
+            user.setOtpExpirationTime(null);
+            signUpRepository.save(user);
             throw new UserNotFoundException("Your OTP is expired. Create a new OTP if you want to Proceed.");
         }
+        
+       
         return "OTP Validated Successfully.";
     }
 }
