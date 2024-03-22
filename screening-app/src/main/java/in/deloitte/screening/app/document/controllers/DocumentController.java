@@ -9,14 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import in.deloitte.screening.app.applicant.services.ApplicantService;
-import in.deloitte.screening.app.document.dto.ResumeDownloadedUserRequest;
 import in.deloitte.screening.app.document.dto.UploadJdResponse;
 import in.deloitte.screening.app.document.dto.UploadResumesResponse;
 import in.deloitte.screening.app.document.services.JobDescriptionService;
@@ -28,11 +25,8 @@ import in.deloitte.screening.app.exceptions.BadInputException;
 @RequestMapping("/upload")
 public class DocumentController {
 	
-	 private Logger logger = LogManager.getLogger(DocumentController.class);
-	
-	@Autowired
-	ApplicantService applicantService;
-	
+	private Logger logger = LogManager.getLogger(DocumentController.class);
+
 	@Autowired
 	ResumeService resumeService;
 	
@@ -43,20 +37,19 @@ public class DocumentController {
 	public ResponseEntity<UploadResumesResponse> saveApplicantResume(
 							@RequestPart("cv") List<MultipartFile> resumes, 
 							@RequestPart("email") String userEmail) throws IOException{
-		
+	
 		if(resumes.get(0).isEmpty()) {
 			throw new BadInputException("No resumes found, Please upload atleast 1 resume");
 		}
-		
-		if(resumes.size() > 100) {
+		else if(resumes.size() > 100) {
 			throw new BadInputException("Maximum 100 resumes can be uploaded");
 		}
-		
-		if(userEmail.equals("\"\"") || userEmail == null) {
-			throw new BadInputException("User email is required to upload");
+		else if(userEmail.equals("\"\"") || userEmail.equals("null")) {
+			throw new BadInputException("User email is required to upload Resume");
 		}
-		logger.info("Logged In User email : {} ",userEmail);
-		UploadResumesResponse response = applicantService.saveApplicantInfo(resumes, userEmail);		
+		
+		logger.info("Logged In User email : {} ", userEmail);
+		UploadResumesResponse response = resumeService.saveResumeInfo(resumes, userEmail);		
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
 	
@@ -64,17 +57,15 @@ public class DocumentController {
 	@PostMapping("/jd")
 	public ResponseEntity<UploadJdResponse> saveJobDescription(
 							@RequestPart("jd") MultipartFile jd, 
-							@RequestPart("email") String userEmail,
-							@RequestPart("jd_desc") String jd_desc,
-							@RequestPart("requi_no") String requi_no) throws IOException {
-		System.out.println("JD : "+jd_desc+" req : "+requi_no+" file : "+jd.getOriginalFilename());
+							@RequestPart("email") String userEmail) throws IOException {
+		
 		if(jd.isEmpty()) {
 			throw new BadInputException("No Job Description found, Please upload it");
 		}
 		else if(!jd.getOriginalFilename().endsWith(".pdf") && !jd.getOriginalFilename().endsWith(".docx")) {
 			throw new BadInputException("Unsupported file format : " + jd.getOriginalFilename().substring(jd.getOriginalFilename().indexOf(".")+1).toUpperCase() + ", only pdf or docx are acceptable...");
 		}
-		else if(userEmail.equals("\"\"") || userEmail == null) {
+		else if(userEmail.equals("\"\"") || userEmail.equals("null")) {
 			throw new BadInputException("User email is required to upload Job Description");
 		}
 		

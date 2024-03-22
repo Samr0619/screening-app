@@ -19,7 +19,6 @@ public class SkillsServiceImpl implements SkillsService {
 	@Override
 	public List<Skills> addSkills(AddSkillsRequest addSkillsRequest) {
 	
-
 		List<Skills> skillList =  addSkillsRequest.getSkills()
 												  .stream()
 												  .map(skill -> new Skills(skill)).toList();

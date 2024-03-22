@@ -1,4 +1,4 @@
-package in.deloitte.screening.app.applicant.dto;
+package in.deloitte.screening.app.profiles.dto;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import in.deloitte.screening.app.document.entities.ResumeDownloadedUserInfo;
+
 
 public class SearchProfilesResponse {
 
@@ -24,6 +25,7 @@ public class SearchProfilesResponse {
 	private byte[] resume;
 	
 	private List<ResumeDownloadedUserInfo> downloadedBy;
+	
 
 	public SearchProfilesResponse(String experience) {
 		this.experience = experience;

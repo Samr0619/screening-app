@@ -5,12 +5,14 @@ import java.time.LocalDateTime;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -35,7 +37,7 @@ public class GlobalExceptionHandler {
 		exceptionResponse.setPath(request.getRequestURI());
 		exceptionResponse.setTimeStamp(LocalDateTime.now());
 		
-		logger.error("Global Exception :: "+exceptionResponse.toString());
+		logger.error("Global Exception :: " + exceptionResponse.toString());
 		
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionResponse);
 	}
@@ -152,6 +154,43 @@ public class GlobalExceptionHandler {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
 	}
 
+	@ExceptionHandler(DataIntegrityViolationException.class)
+	public ResponseEntity<ExceptionResponse> handleDataIntegrityViolationException(
+			DataIntegrityViolationException exception, final HttpServletRequest request){
+		
+		exception.printStackTrace();
+		ExceptionResponse exceptionResponse = new ExceptionResponse();
+		exceptionResponse.setStatus(HttpStatus.BAD_REQUEST.value());
+		String defaultMessage = exception.getMessage().substring(
+												exception.getMessage().indexOf("(email)"), 
+												exception.getMessage().indexOf("]"));
+		exceptionResponse.setDefaultMessage(defaultMessage);
+		exceptionResponse.setFriendlyMessage("Invalid input...");
+		exceptionResponse.setExceptionType(exception.getClass().getName());
+		exceptionResponse.setPath(request.getRequestURI());
+		exceptionResponse.setTimeStamp(LocalDateTime.now());
+		logger.error("Global Exception :: " + exceptionResponse.toString());
+
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionResponse);
+	}
+	
+	@ExceptionHandler(MissingServletRequestPartException.class)
+	public ResponseEntity<ExceptionResponse> handleMissingServletRequestPartException(
+			MissingServletRequestPartException exception, final HttpServletRequest request){
+		
+		exception.printStackTrace();
+		ExceptionResponse exceptionResponse = new ExceptionResponse();
+		exceptionResponse.setStatus(HttpStatus.BAD_REQUEST.value());
+		exceptionResponse.setDefaultMessage(exception.getMessage());
+		exceptionResponse.setFriendlyMessage("Something is broken...");
+		exceptionResponse.setExceptionType(exception.getClass().getName());
+		exceptionResponse.setPath(request.getRequestURI());
+		exceptionResponse.setTimeStamp(LocalDateTime.now());
+		logger.error("Global Exception :: "+exceptionResponse.toString());
+		
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionResponse);
+	}
+	
 	@ExceptionHandler(RuntimeException.class)
 	public ResponseEntity<ExceptionResponse> handleRuntimeException(
 			RuntimeException exception, final HttpServletRequest request){
@@ -165,7 +204,7 @@ public class GlobalExceptionHandler {
 		exceptionResponse.setPath(request.getRequestURI());
 		exceptionResponse.setTimeStamp(LocalDateTime.now());
 		logger.error("Global Exception :: "+exceptionResponse.toString());
-
+		
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exceptionResponse);
 	}
 }

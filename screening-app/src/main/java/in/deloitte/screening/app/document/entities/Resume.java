@@ -2,7 +2,6 @@ package in.deloitte.screening.app.document.entities;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -14,9 +13,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 
 @Entity
 public class Resume {
@@ -28,8 +24,12 @@ public class Resume {
 	@Column(unique = true)
 	private String email;
 	
+	private Double experience;
+	
 	@Column(name = "resume_file")
 	private byte [] resumeFile;
+	
+	private String resumeFileName;
 	
 	private String docType;
 	
@@ -42,6 +42,9 @@ public class Resume {
 	@Column(length = 100000)
 	private String text;
 	
+	@Column(name = "resume_skills")
+	private Set<String> skills;
+	
 	@Convert(converter = MapToJson.class)
 	@Column(length = 100000)
 	private Map<String, Long> vector;
@@ -49,10 +52,11 @@ public class Resume {
 	@ElementCollection
 	private List<ResumeDownloadedUserInfo> downloads;
 	
-	@ManyToMany
-	@JoinTable(name = "resume_jd", joinColumns = @JoinColumn(name = "resume_id"),
-	inverseJoinColumns = @JoinColumn(name = "jobDescription_id"))
-	private Set<JobDescription> jd = new HashSet<>();
+//	@ManyToMany
+//	@JoinTable(name = "resume_jd", 
+//	joinColumns = @JoinColumn(name = "resume_id", referencedColumnName = "id"),
+//	inverseJoinColumns = @JoinColumn(name = "jobDescription_id", referencedColumnName = "jdFileName"))
+//	private Set<JobDescription> jd = new HashSet<>();
 	
 
 	/**
@@ -70,6 +74,20 @@ public class Resume {
 	}
 
 	/**
+	 * @return the experience
+	 */
+	public Double getExperience() {
+		return experience;
+	}
+
+	/**
+	 * @param experience the experience to set
+	 */
+	public void setExperience(Double experience) {
+		this.experience = experience;
+	}
+
+	/**
 	 * @return the resumeFile
 	 */
 	public byte[] getResumeFile() {
@@ -81,6 +99,20 @@ public class Resume {
 	 */
 	public void setResumeFile(byte[] resumeFile) {
 		this.resumeFile = resumeFile;
+	}
+
+	/**
+	 * @return the resumeFileName
+	 */
+	public String getResumeFileName() {
+		return resumeFileName;
+	}
+
+	/**
+	 * @param resumeFileName the resumeFileName to set
+	 */
+	public void setResumeFileName(String resumeFileName) {
+		this.resumeFileName = resumeFileName;
 	}
 
 	/**
@@ -168,6 +200,20 @@ public class Resume {
 	}
 
 	/**
+	 * @return the skills
+	 */
+	public Set<String> getSkills() {
+		return skills;
+	}
+
+	/**
+	 * @param skills the skills to set
+	 */
+	public void setSkills(Set<String> skills) {
+		this.skills = skills;
+	}
+
+	/**
 	 * @return the tokens
 	 */
 	public Map<String, Long> getVectors() {
@@ -198,47 +244,46 @@ public class Resume {
 	/**
 	 * @return the jd
 	 */
-	public Set<JobDescription> getJd() {
-		return jd;
-	}
-
-	/**
-	 * @param jd the jd to set
-	 */
-	public void setJd(Set<JobDescription> jd) {
-		this.jd = jd;
-	}
+//	public Set<JobDescription> getJd() {
+//		return jd;
+//	}
+//
+//	/**
+//	 * @param jd the jd to set
+//	 */
+//	public void setJd(Set<JobDescription> jd) {
+//		this.jd = jd;
+//	}
 
 	public Resume() {
 		
 	}
 
-	public Resume(int id, String email, byte[] resumeFile, String docType, String uploadedBy, LocalDateTime uploadTime,
-			String text, Map<String, Long> vector) {
+	public Resume(int id, String email, Double experience, byte[] resumeFile, String resumeFileName, String docType,
+			String uploadedBy, LocalDateTime uploadTime, String text, Set<String> skills, Map<String, Long> vector,
+			List<ResumeDownloadedUserInfo> downloads) {
 		super();
 		this.id = id;
 		this.email = email;
+		this.experience = experience;
 		this.resumeFile = resumeFile;
+		this.resumeFileName = resumeFileName;
 		this.docType = docType;
 		this.uploadedBy = uploadedBy;
 		this.uploadTime = uploadTime;
 		this.text = text;
+		this.skills = skills;
 		this.vector = vector;
+		this.downloads = downloads;
 	}
+	
 
 	@Override
 	public String toString() {
-		return "Resume [id=" + id + ", email=" + email + ", resumeFile=" + Arrays.toString(resumeFile) + ", docType="
-				+ docType + ", uploadedBy=" + uploadedBy + ", uploadTime=" + uploadTime + ", text=" + text + ", vector="
-				+ vector + ", downloads=" + downloads + ", jd=" + jd + "]";
+		return "Resume [id=" + id + ", email=" + email + ", experience=" + experience + ", resumeFile="
+				+ Arrays.toString(resumeFile) + ", resumeFileName=" + resumeFileName + ", docType=" + docType
+				+ ", uploadedBy=" + uploadedBy + ", uploadTime=" + uploadTime + ", text=" + text + ", skills=" + skills
+				+ ", vector=" + vector + ", downloads=" + downloads + "]";
 	}
 
-//	@Override
-//	public String toString() {
-//		return "Resume [id=" + id + ", email=" + email + ", resumeFile=" + Arrays.toString(resumeFile) + ", docType="
-//				+ docType + ", uploadedBy=" + uploadedBy + ", uploadTime=" + uploadTime + ", text=" + text + ", vector="
-//				+ vector + "]";
-//	}
-	
-	
 }

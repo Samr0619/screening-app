@@ -2,31 +2,27 @@ package in.deloitte.screening.app.document.entities;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
 
 
 @Entity
 public class JobDescription {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+//	@Id
+//	@GeneratedValue(strategy = GenerationType.IDENTITY)
+//	private int id;
 	
 	@Column(name = "requistion_id")
 	private String requistionId;
 	
-	@Column(name = "jd_file_name")
-	private String fileName;
+//	@Column(name = "jd_file_name")
+	@Id
+	private String jdFileName;
 	
 	@Column(name = "jd_file")
 	private byte [] jdFile;
@@ -44,24 +40,29 @@ public class JobDescription {
 	@Column(name = "upload_time")
 	private LocalDateTime uploadTime;
 	
-	@ManyToMany(mappedBy = "jd")
-	private Set<Resume> resumes = new HashSet<>();
+//	@ManyToMany(mappedBy = "jd")
+//	private Set<Resume> resumes = new HashSet<>();
 	
+//	@ManyToMany
+//	@JoinTable(name = "res_jd", 
+//	joinColumns = @JoinColumn(name = "jd_file_name", referencedColumnName = "jdFileName"),
+//	inverseJoinColumns = @JoinColumn(name = "resume_id", referencedColumnName = "resume_id"))
+//	private Set<ResumeJobDescription> resJd = new HashSet<>();
 	
 
-	/**
-	 * @return the id
-	 */
-	public int getId() {
-		return id;
-	}
-
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(int id) {
-		this.id = id;
-	}
+//	/**
+//	 * @return the id
+//	 */
+//	public int getId() {
+//		return id;
+//	}
+//
+//	/**
+//	 * @param id the id to set
+//	 */
+//	public void setId(int id) {
+//		this.id = id;
+//	}
 
 	/**
 	 * @return the requistionId
@@ -80,15 +81,15 @@ public class JobDescription {
 	/**
 	 * @return the fileName
 	 */
-	public String getFileName() {
-		return fileName;
+	public String getJdFileName() {
+		return jdFileName;
 	}
 
 	/**
 	 * @param fileName the fileName to set
 	 */
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
+	public void setJdFileName(String jdFileName) {
+		this.jdFileName = jdFileName;
 	}
 	
 	
@@ -166,25 +167,25 @@ public class JobDescription {
 	/**
 	 * @return the resumes
 	 */
-	public Set<Resume> getResumes() {
-		return resumes;
-	}
-
-	/**
-	 * @param resumes the resumes to set
-	 */
-	public void setResumes(Set<Resume> resumes) {
-		this.resumes = resumes;
-	}
+//	public Set<Resume> getResumes() {
+//		return resumes;
+//	}
+//
+//	/**
+//	 * @param resumes the resumes to set
+//	 */
+//	public void setResumes(Set<Resume> resumes) {
+//		this.resumes = resumes;
+//	}
 
 	public JobDescription() {
 		
 	}
 
-	public JobDescription(String requistionId, String fileName, byte [] jdFile, String jdText,
+	public JobDescription(String requistionId, String jdFileName, byte [] jdFile, String jdText,
 			Map<String, Long> jdVector, String uploadedBy, LocalDateTime uploadTime) {
 		this.requistionId = requistionId;
-		this.fileName = fileName;
+		this.jdFileName = jdFileName;
 		this.jdFile = jdFile;
 		this.jdText = jdText;
 		this.jdVector = jdVector;
@@ -194,9 +195,9 @@ public class JobDescription {
 
 	@Override
 	public String toString() {
-		return "JobDescription [id=" + id + ", requistionId=" + requistionId + ", fileName=" + fileName + ", jdFile="
+		return "JobDescription [requistionId=" + requistionId + ", jdFileName=" + jdFileName + ", jdFile="
 				+ Arrays.toString(jdFile) + ", jdText=" + jdText + ", jdVector=" + jdVector + ", uploadedBy="
-				+ uploadedBy + ", uploadTime=" + uploadTime + ", resumes=" + resumes + "]";
+				+ uploadedBy + ", uploadTime=" + uploadTime + ", resumes=" + "]";
 	}
 	
 }

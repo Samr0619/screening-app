@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import in.deloitte.screening.app.document.dto.ResumeDownloadedUserRequest;
+import in.deloitte.screening.app.document.services.JobDescriptionService;
 import in.deloitte.screening.app.document.services.ResumeService;
 
 
@@ -18,7 +19,11 @@ public class ResumeController {
 	
 	@Autowired
 	ResumeService resumeService;
+	
+	@Autowired
+	JobDescriptionService jobDescriptionService;
 
+	
 	@PostMapping("/download/user")
 	public ResponseEntity<String> saveResumeDownloadedUserInfo(@RequestBody ResumeDownloadedUserRequest request){
 		

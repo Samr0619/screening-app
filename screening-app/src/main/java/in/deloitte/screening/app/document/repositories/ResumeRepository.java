@@ -1,5 +1,6 @@
 package in.deloitte.screening.app.document.repositories;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -30,5 +31,11 @@ public interface ResumeRepository extends JpaRepository<Resume, Integer>{
 
 	@Query(value = "SELECT id from public.resume WHERE email=:email", nativeQuery = true)
 	public Optional<Integer> getResumeByEmail(@Param("email")String userEmail);
+	
+	@Query(value = "SELECT * FROM public.resume WHERE DATE(uploaded_time) BETWEEN :thirtyDaysAgoDate AND :currentDate", nativeQuery = true)
+	public List<Resume> getResumesDataOfLast30Days(LocalDate thirtyDaysAgoDate, LocalDate currentDate);
+
+	@Query(value = "SELECT * FROM public.resume WHERE experience BETWEEN :minExp AND :maxExp ORDER BY resume_file_name", nativeQuery = true)
+	public List<Resume> getResumeDataByExperience(String minExp, String maxExp);
 	
 }

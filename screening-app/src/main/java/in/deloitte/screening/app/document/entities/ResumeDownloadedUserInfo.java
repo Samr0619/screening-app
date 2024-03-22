@@ -69,7 +69,6 @@ public class ResumeDownloadedUserInfo {
 	}
 	
 	public ResumeDownloadedUserInfo(String applicantEmail, String downloadedUserEmail, LocalDateTime downloadTime) {
-		super();
 		this.applicantEmail = applicantEmail;
 		this.downloadedUserEmail = downloadedUserEmail;
 		this.downloadTime = downloadTime;

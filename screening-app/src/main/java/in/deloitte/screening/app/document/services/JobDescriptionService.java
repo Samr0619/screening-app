@@ -15,5 +15,5 @@ public interface JobDescriptionService {
 
 	public UploadJdResponse saveJobDescription(MultipartFile jd, String userEmail) throws IOException;
 	
-	public List<SearchJdResponse>  getAllJdInfo(String jdFileName);
+	public List<SearchJdResponse> getAllJdInfo(String jdFileName);
 }

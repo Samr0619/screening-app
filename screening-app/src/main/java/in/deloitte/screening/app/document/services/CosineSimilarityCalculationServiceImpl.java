@@ -10,22 +10,14 @@ import org.apache.commons.math3.linear.RealVector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import in.deloitte.screening.app.document.utils.DocumentContentAnalyzer;
-import in.deloitte.screening.app.document.utils.DocumentContentExtractionService;
-import in.deloitte.screening.app.document.utils.VectorizeDocumentContent;
+import in.deloitte.screening.app.document.utils.VectorizeDocumentText;
 
 
 @Service
 public class CosineSimilarityCalculationServiceImpl implements CosineSimilarityCalculationService {
 
 	@Autowired
-	DocumentContentExtractionService pdfContentExtractor;
-
-	@Autowired
-	DocumentContentAnalyzer documentContentAnalyzer;
-
-	@Autowired
-	VectorizeDocumentContent vectorize;
+	VectorizeDocumentText vectorize;
 
 
 	@Override
