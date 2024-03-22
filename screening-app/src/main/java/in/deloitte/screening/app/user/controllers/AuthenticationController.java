@@ -46,7 +46,7 @@ public class AuthenticationController {
     }
 
     /**
-     * @param email
+     * @param req
      * @return
      */
     @PutMapping("/send-otp")

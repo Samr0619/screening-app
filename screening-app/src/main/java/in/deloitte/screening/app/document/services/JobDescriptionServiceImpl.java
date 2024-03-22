@@ -50,14 +50,14 @@ public class JobDescriptionServiceImpl implements JobDescriptionService {
 	
 	@Autowired
 	@Qualifier("pdf")
-	DocumentTextExtractor pdfContentExtractor;
+	DocumentTextExtractor pdfTextExtractor;
 	
 	@Autowired
 	@Qualifier("docx")
-	DocumentTextExtractor docxContentExtractor;
+	DocumentTextExtractor docxTextExtractor;
 	
 	@Autowired
-	DocumentTextAnalyzer documentContentAnalyzer;
+	DocumentTextAnalyzer documentTextAnalyzer;
 	
 	@Autowired
 	SkillsRepository skillsRepository;
@@ -85,13 +85,13 @@ public class JobDescriptionServiceImpl implements JobDescriptionService {
 		String jdText = "";
 		
 		if(jdOriginalFileName.endsWith("pdf"))
-			jdText = pdfContentExtractor.extractText(jd).toLowerCase();
+			jdText = pdfTextExtractor.extractText(jd).toLowerCase();
 		else if(jdOriginalFileName.endsWith("docx"))
-			jdText = docxContentExtractor.extractText(jd).toLowerCase();
+			jdText = docxTextExtractor.extractText(jd).toLowerCase();
 		
-		String sw = documentContentAnalyzer.stopWords();
+		String sw = DocumentTextAnalyzer.stopWords();
 		Analyzer analyzer = new StopAnalyzer(new CharArraySet(Arrays.asList(sw.split(" ")), true));
-		List<String> jdToken = documentContentAnalyzer.tokenizeText(analyzer, jdText);
+		List<String> jdToken = documentTextAnalyzer.tokenizeText(analyzer, jdText);
 		
 		List<String> jdSkills = new ArrayList<>();
 		List<String> skills = skillsRepository.getAllSkills();

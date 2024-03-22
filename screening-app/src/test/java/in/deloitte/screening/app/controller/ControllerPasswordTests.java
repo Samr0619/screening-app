@@ -205,7 +205,7 @@ public class ControllerPasswordTests {
 
         Long otp = 123456L;
         String email = "shwlandge@deloitte.com";
-        ValidateOtpRequestDto requestDto = new ValidateOtpRequestDto(otp,email);
+        ValidateOtpRequestDto requestDto = new ValidateOtpRequestDto(otp, email);
 
         String successMessage = "OTP validated successfully";
         when(userService.validateOTP(otp, email)).thenReturn(successMessage);

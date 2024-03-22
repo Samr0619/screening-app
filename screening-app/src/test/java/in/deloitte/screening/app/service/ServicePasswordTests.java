@@ -128,7 +128,7 @@ public class ServicePasswordTests {
 
     @Test
     @DisplayName("test for generate OTP Failed")
-    public void generateOTPFailedTest() throws InterruptedException {
+    public void generateOTPFailedTest() {
         String email = "nonexistent@example.com";
 
         // Mock the repository behavior to return an empty Optional, simulating user not found

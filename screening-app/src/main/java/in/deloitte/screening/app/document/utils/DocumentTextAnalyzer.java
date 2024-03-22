@@ -57,7 +57,7 @@ public class DocumentTextAnalyzer {
 	 * @return Returns stop words to be removed
 	 * 
 	 */
-	public String stopWords() {
+	public static String stopWords() {
 		return "0o 0s 3a 3b 3d 6b 6o a a1 a2 a3 a4 ab able about above abst ac accordance according accordingly across \r\n"
 				+ "act actually ad added adj ae af affected affecting affects after afterwards ag again against ah ain ain't aj \r\n"
 				+ "al all allow allows almost alone along already also although always am among amongst amoungst \r\n"
